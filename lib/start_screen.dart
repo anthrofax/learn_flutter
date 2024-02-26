@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-class StartScreen extends StatefulWidget {
-  @override
-  State<StartScreen> createState() {
-    return _StartScreenState();
-  }
-}
+class StartScreen extends StatelessWidget {
+  const StartScreen({super.key});
 
-class _StartScreenState extends State<StartScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -16,6 +12,7 @@ class _StartScreenState extends State<StartScreen> {
         Image.asset(
           'assets/images/quiz-logo.png',
           width: 350,
+          // opacity: Animation(),
         ),
         const SizedBox(
           height: 20,
@@ -23,18 +20,20 @@ class _StartScreenState extends State<StartScreen> {
         const Text(
           'Learn Flutter in the fun way',
           style: TextStyle(
-              color: Colors.white, fontSize: 30, fontWeight: FontWeight.w100),
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.w100),
         ),
         const SizedBox(
           height: 20,
         ),
-        OutlinedButton(
+        OutlinedButton.icon(
           onPressed: () {},
           style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.white,
-            shape: const ContinuousRectangleBorder()
-          ),
-          child: const Text('Start Quiz'),
+              foregroundColor: Colors.white,
+              shape: const ContinuousRectangleBorder(), 
+              side: const BorderSide(color: Colors.white)
+              ),
+          icon: const Icon(Icons.arrow_right_alt),
+          label: const Text('Start Quiz'),
         )
       ],
     );
