@@ -12,17 +12,27 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  Widget? activeScreen;
+  // Solution 1 - Conditional Rendering
+  // Widget? activeScreen;
 
-  @override
-  void initState() {
-    activeScreen = StartScreen(startQuiz);
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   activeScreen = StartScreen(startQuiz);
+  //   super.initState();
+  // }
+
+  // void startQuiz() {
+  //   setState(() {
+  //     activeScreen = const QuestionsScreen();
+  //   });
+  // }
+
+// Solution 2 - Conditional Rendering
+  var activeScreen = 'start-screen';
 
   void startQuiz() {
     setState(() {
-      activeScreen = const QuestionsScreen();
+      activeScreen = 'questions-screen';
     });
   }
 
@@ -31,7 +41,12 @@ class _QuizState extends State<Quiz> {
     return (MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.purple[800],
-        body: Center(child: activeScreen),
+        body: Center(
+          // child: activeScreen
+          child: (activeScreen == 'start-screen'
+              ? StartScreen(startQuiz)
+              : const QuestionsScreen()),
+        ),
       ),
     ));
   }
