@@ -7,7 +7,8 @@ class StartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Center(
+        child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         // Opacity(
@@ -43,6 +44,6 @@ class StartScreen extends StatelessWidget {
           label: const Text('Start Quiz'),
         )
       ],
-    );
+    ));
   }
 }

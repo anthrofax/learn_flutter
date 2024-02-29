@@ -45,16 +45,20 @@ class _QuizState extends State<Quiz> {
     //     ? StartScreen(startQuiz)
     //     : const QuestionsScreen();
 
-    if (activeScreen == 'questions-screen') widgetScreen = const QuestionsScreen();
+    if (activeScreen == 'questions-screen') {
+      widgetScreen = const QuestionsScreen();
+    }
 
     return (MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.purple[800],
-        body: Center(
-          // child: activeScreen
-          child: widgetScreen,
-        ),
-      ),
+          body: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [
+          Color.fromARGB(255, 78, 13, 151),
+          Color.fromARGB(255, 107, 15, 168)
+        ])),
+        child: widgetScreen,
+      )),
     ));
   }
 }
