@@ -38,14 +38,21 @@ class _QuizState extends State<Quiz> {
 
   @override
   Widget build(BuildContext context) {
+    Widget widgetScreen = StartScreen(startQuiz);
+
+    // Using ternary to determine the Widget Screen
+    // Widget widgetScreen = (activeScreen == 'start-screen')
+    //     ? StartScreen(startQuiz)
+    //     : const QuestionsScreen();
+
+    if (activeScreen == 'questions-screen') widgetScreen = const QuestionsScreen();
+
     return (MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.purple[800],
         body: Center(
           // child: activeScreen
-          child: (activeScreen == 'start-screen'
-              ? StartScreen(startQuiz)
-              : const QuestionsScreen()),
+          child: widgetScreen,
         ),
       ),
     ));
