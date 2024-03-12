@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/questions_answers.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({super.key});
@@ -24,9 +25,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           const SizedBox(
             height: 30.0,
           ),
-          ElevatedButton(onPressed: () {}, child: const Text('Answer 1')),
-          ElevatedButton(onPressed: () {}, child: const Text('Answer 2')),
-          ElevatedButton(onPressed: () {}, child: const Text('Answer 3'))
+          QuestionsAnswers(answerText: "Answer 1", onTap: () {}),
+          QuestionsAnswers(answerText: "Answer 2", onTap: () {}),
+          QuestionsAnswers(answerText: "Answer 3", onTap: () {}),
         ],
       ),
     ));
