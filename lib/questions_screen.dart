@@ -13,9 +13,17 @@ class QuestionsScreen extends StatefulWidget {
 }
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
+  int activeQuestionIndex = 0;
+
+  void answerQuestion() {
+    setState(() {
+      activeQuestionIndex++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    QuizQuestion activeQuestion = questions[0];
+    QuizQuestion activeQuestion = questions[activeQuestionIndex];
     final List<String> shuffledList = List.of(activeQuestion.answers);
     shuffledList.shuffle();
 
@@ -29,14 +37,16 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           children: [
             Text(
               activeQuestion.question,
-              style: const TextStyle(color: Colors.white, ),
+              style: const TextStyle(
+                color: Colors.white,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 15.0,
             ),
             ...shuffledList.map((answer) {
-              return QuestionsAnswers(answerText: answer, onTap: () {});
+              return QuestionsAnswers(answerText: answer, onTap: answerQuestion);
             })
           ],
         ),
