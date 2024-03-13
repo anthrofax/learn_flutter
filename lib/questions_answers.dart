@@ -14,6 +14,7 @@ class QuestionsAnswers extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 193, 0, 227),
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
+        
       ),
       onPressed: onTap,
       child: Text(answerText),
