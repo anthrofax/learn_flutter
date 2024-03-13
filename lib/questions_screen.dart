@@ -16,11 +16,13 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   @override
   Widget build(BuildContext context) {
     QuizQuestion activeQuestion = questions[0];
+    final List<String> shuffledList = List.of(activeQuestion.answers);
+    shuffledList.shuffle();
 
     return (SizedBox(
       width: double.infinity,
       child: Container(
-        margin: const EdgeInsets.all(40),
+        margin: const EdgeInsets.all(100),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -31,9 +33,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(
-              height: 25.0,
+              height: 15.0,
             ),
-            ...activeQuestion.answers.map((answer) {
+            ...shuffledList.map((answer) {
               return QuestionsAnswers(answerText: answer, onTap: () {});
             })
           ],
