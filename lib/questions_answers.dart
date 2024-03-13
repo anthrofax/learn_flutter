@@ -9,15 +9,17 @@ class QuestionsAnswers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 193, 0, 227),
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
-        
-      ),
-      onPressed: onTap,
-      child: Text(answerText),
-    ));
+    return (Container(
+        margin: const EdgeInsets.only(top: 15.0),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 193, 0, 227),
+            foregroundColor: Colors.white,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
+          ),
+          onPressed: onTap,
+          child: Text(answerText),
+        )));
   }
 }
