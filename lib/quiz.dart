@@ -65,7 +65,7 @@ class _QuizState extends State<Quiz> {
     }
 
     if (activeScreen == 'result-screen') {
-      widgetScreen = const ResultScreen();
+      widgetScreen =  ResultScreen(chosenAnswers: chosenAnswers,);
     }
 
     return (MaterialApp(
