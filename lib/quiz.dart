@@ -29,11 +29,16 @@ class _QuizState extends State<Quiz> {
 
 // Solution 2 - Conditional Rendering
   var activeScreen = 'start-screen';
+  final List<String> chosenAnswers = [];
 
   void startQuiz() {
     setState(() {
       activeScreen = 'questions-screen';
     });
+  }
+
+  void chooseAnswer(String answer) {
+    chosenAnswers.add(answer);
   }
 
   @override
@@ -46,7 +51,7 @@ class _QuizState extends State<Quiz> {
     //     : const QuestionsScreen();
 
     if (activeScreen == 'questions-screen') {
-      widgetScreen = const QuestionsScreen();
+      widgetScreen =  QuestionsScreen(onChooseAnswer: chooseAnswer);
     }
 
     return (MaterialApp(
