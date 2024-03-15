@@ -12,7 +12,13 @@ class ResultSummary extends StatelessWidget {
         return Row(
           children: [
             Text(((summary['question_index'] as int) + 1).toString()),
-            Text(summary['question'] as String)
+            Column(
+              children: [
+                Text(summary['question'] as String),
+                Text(summary['correct_answer'] as String),
+                Text(summary['user_answer'] as String)
+              ],
+            )
           ],
         );
       }).toList(),

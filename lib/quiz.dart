@@ -43,7 +43,7 @@ class _QuizState extends State<Quiz> {
     chosenAnswers.add(answer);
 
     if (chosenAnswers.length == questions.length) {
-      chosenAnswers.clear();
+      // chosenAnswers.clear();
 
       setState(() {
         activeScreen = 'result-screen';
