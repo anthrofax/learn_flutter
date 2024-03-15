@@ -14,7 +14,7 @@ class ResultScreen extends StatelessWidget {
       summary.add({
         'question_index': i,
         'question': questions[0].question,
-        'correct_answer': questions[0].answers[0],
+        'correct_answer': questions[i].answers[0],
         'user_answer': chosenAnswers[i]
       });
     }
@@ -24,6 +24,12 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, Object>> summary = getResultSummary();
+    final int totalQuestions = questions.length;
+    final int amountOfCorrectAnswers = summary.where((quizData) {
+      return quizData['correct_answer'] == quizData['user_answer'];
+    }).length;
+
     return (SizedBox(
         width: double.infinity,
         child: Container(
@@ -31,12 +37,12 @@ class ResultScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                    "Kamu telah menjawab X soal dengan benar dari Y soal"),
+                Text(
+                    "Kamu telah menjawab $amountOfCorrectAnswers soal dengan benar dari $totalQuestions soal"),
                 const SizedBox(
                   height: 30,
                 ),
-                ResultSummary(getResultSummary()),
+                ResultSummary(summary),
                 const SizedBox(
                   height: 30,
                 ),
