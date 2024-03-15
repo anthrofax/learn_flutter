@@ -8,23 +8,28 @@ class ResultSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (Column(
-      children: summariesData.map((summary) {
-        return Row(
-          children: [
-            Text(((summary['question_index'] as int) + 1).toString()),
-            Expanded(
-              child: Column(
-                children: [
-                  Text(summary['question'] as String),
-                  Text(summary['correct_answer'] as String),
-                  Text(summary['user_answer'] as String)
-                ],
-              ),
-            )
-          ],
-        );
-      }).toList(),
-    ));
+    return SizedBox(
+      height: 300,
+      child: SingleChildScrollView(
+        child: (Column(
+          children: summariesData.map((summary) {
+            return Row(
+              children: [
+                Text(((summary['question_index'] as int) + 1).toString()),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(summary['question'] as String),
+                      Text(summary['correct_answer'] as String),
+                      Text(summary['user_answer'] as String)
+                    ],
+                  ),
+                )
+              ],
+            );
+          }).toList(),
+        )),
+      ),
+    );
   }
 }
