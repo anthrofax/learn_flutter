@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ResultSummary extends StatelessWidget {
   const ResultSummary(this.summariesData, {super.key});
@@ -12,12 +13,14 @@ class ResultSummary extends StatelessWidget {
         return Row(
           children: [
             Text(((summary['question_index'] as int) + 1).toString()),
-            Column(
-              children: [
-                Text(summary['question'] as String),
-                Text(summary['correct_answer'] as String),
-                Text(summary['user_answer'] as String)
-              ],
+            Expanded(
+              child: Column(
+                children: [
+                  Text(summary['question'] as String),
+                  Text(summary['correct_answer'] as String),
+                  Text(summary['user_answer'] as String)
+                ],
+              ),
             )
           ],
         );
