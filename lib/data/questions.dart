@@ -1,6 +1,6 @@
-import 'package:learn_flutter/models/quiz_question.dart';
+import 'package:adv_basics/models/quiz_question.dart';
 
-var questions = [
+const questions = [
   QuizQuestion(
     'What are the main building blocks of Flutter UIs?',
     [
@@ -51,5 +51,5 @@ var questions = [
       'By calling updateUI()',
       'By calling updateState()',
     ],
-  )
+  ),
 ];

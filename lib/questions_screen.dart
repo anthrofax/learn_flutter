@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:learn_flutter/models/quiz_question.dart';
-import 'package:learn_flutter/questions_answers.dart';
-import 'package:learn_flutter/data/questions.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen({super.key, required this.onChooseAnswer});
+import 'package:adv_basics/answer_button.dart';
+import 'package:adv_basics/data/questions.dart';
 
-  final Function(String answer) onChooseAnswer;
+class QuestionsScreen extends StatefulWidget {
+  const QuestionsScreen({
+    super.key,
+    required this.onSelectAnswer,
+  });
+
+  final void Function(String answer) onSelectAnswer;
 
   @override
   State<QuestionsScreen> createState() {
@@ -16,50 +19,50 @@ class QuestionsScreen extends StatefulWidget {
 }
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
-  int activeQuestionIndex = 0;
+  var currentQuestionIndex = 0;
 
-  void answerQuestion(String answer) {
-    widget.onChooseAnswer(answer);
-
+  void answerQuestion(String selectedAnswer) {
+    widget.onSelectAnswer(selectedAnswer);
+    // currentQuestionIndex = currentQuestionIndex + 1;
+    // currentQuestionIndex += 1;
     setState(() {
-      activeQuestionIndex++;
+      currentQuestionIndex++; // increments the value by 1
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    QuizQuestion activeQuestion = questions[activeQuestionIndex];
-    final List<String> shuffledList = List.of(activeQuestion.answers);
-    shuffledList.shuffle();
+  Widget build(context) {
+    final currentQuestion = questions[currentQuestionIndex];
 
-    return (SizedBox(
+    return SizedBox(
       width: double.infinity,
       child: Container(
-        margin: const EdgeInsets.all(100),
+        margin: const EdgeInsets.all(40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              activeQuestion.question,
+              currentQuestion.text,
               style: GoogleFonts.lato(
-                color: Colors.white,
+                color: const Color.fromARGB(255, 201, 153, 251),
                 fontSize: 24,
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(
-              height: 15.0,
-            ),
-            ...shuffledList.map((answer) {
-              return QuestionsAnswers(answerText: answer, onTap: () {
-                answerQuestion(answer);
-              });
+            const SizedBox(height: 30),
+            ...currentQuestion.shuffledAnswers.map((answer) {
+              return AnswerButton(
+                answerText: answer,
+                onTap: () {
+                  answerQuestion(answer);
+                },
+              );
             })
           ],
         ),
       ),
-    ));
+    );
   }
 }

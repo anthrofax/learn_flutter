@@ -7,47 +7,42 @@ class StartScreen extends StatelessWidget {
   final void Function() startQuiz;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Center(
-        child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Opacity(
-        //   opacity: 0.5,
-        //   child: Image.asset(
-        //     'assets/images/quiz-logo.png',
-        //     width: 350,
-        //   ),
-        // ),
-        Image.asset(
-          'assets/images/quiz-logo.png',
-          width: 350,
-          color: const Color.fromARGB(150, 255, 255, 255),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-         Text(
-          'Learn Flutter in the fun way',
-          style: GoogleFonts.lato(
-            color: const Color.fromARGB(255, 201, 153, 251),
-            fontSize: 24,
-            fontWeight: FontWeight.bold
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            'assets/images/quiz-logo.png',
+            width: 300,
+            color: const Color.fromARGB(150, 255, 255, 255),
           ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        OutlinedButton.icon(
-          onPressed: startQuiz,
-          style: OutlinedButton.styleFrom(
+          // Opacity(
+          //   opacity: 0.6,
+          //   child: Image.asset(
+          //     'assets/images/quiz-logo.png',
+          //     width: 300,
+          //   ),
+          // ),
+          const SizedBox(height: 80),
+          Text(
+            'Learn Flutter the fun way!',
+            style: GoogleFonts.lato(
+              color: const Color.fromARGB(255, 237, 223, 252),
+              fontSize: 24,
+            ),
+          ),
+          const SizedBox(height: 30),
+          OutlinedButton.icon(
+            onPressed: startQuiz,
+            style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
-              shape: const ContinuousRectangleBorder(),
-              side: const BorderSide(color: Colors.white)),
-          icon: const Icon(Icons.arrow_right_alt),
-          label: const Text('Start Quiz'),
-        )
-      ],
-    ));
+            ),
+            icon: const Icon(Icons.arrow_right_alt),
+            label: const Text('Start Quiz'),
+          )
+        ],
+      ),
+    );
   }
 }

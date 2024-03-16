@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:learn_flutter/data/questions.dart';
-import 'package:learn_flutter/questions_screen.dart';
-import 'package:learn_flutter/result_screen.dart';
-import 'package:learn_flutter/start_screen.dart';
+
+import 'package:adv_basics/start_screen.dart';
+import 'package:adv_basics/questions_screen.dart';
+import 'package:adv_basics/data/questions.dart';
+import 'package:adv_basics/results_screen.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -14,70 +15,64 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  // Solution 1 - Conditional Rendering
-  // Widget? activeScreen;
+  final List<String> _selectedAnswers = [];
+  var _activeScreen = 'start-screen';
 
-  // @override
-  // void initState() {
-  //   activeScreen = StartScreen(startQuiz);
-  //   super.initState();
-  // }
-
-  // void startQuiz() {
-  //   setState(() {
-  //     activeScreen = const QuestionsScreen();
-  //   });
-  // }
-
-// Solution 2 - Conditional Rendering
-  var activeScreen = 'start-screen';
-  final List<String> chosenAnswers = [];
-
-  void startQuiz() {
+  void _switchScreen() {
     setState(() {
-      activeScreen = 'questions-screen';
+      _activeScreen = 'questions-screen';
     });
   }
 
-  void chooseAnswer(String answer) {
-    chosenAnswers.add(answer);
+  void _chooseAnswer(String answer) {
+    _selectedAnswers.add(answer);
 
-    if (chosenAnswers.length == questions.length) {
-      // chosenAnswers.clear();
-
+    if (_selectedAnswers.length == questions.length) {
       setState(() {
-        activeScreen = 'result-screen';
+        _activeScreen = 'results-screen';
       });
     }
   }
 
+  void restartQuiz() {
+    setState(() {
+      _activeScreen = 'questions-screen';
+    });
+  }
+
   @override
-  Widget build(BuildContext context) {
-    Widget widgetScreen = StartScreen(startQuiz);
+  Widget build(context) {
+    Widget screenWidget = StartScreen(_switchScreen);
 
-    // Using ternary to determine the Widget Screen
-    // Widget widgetScreen = (activeScreen == 'start-screen')
-    //     ? StartScreen(startQuiz)
-    //     : const QuestionsScreen();
-
-    if (activeScreen == 'questions-screen') {
-      widgetScreen = QuestionsScreen(onChooseAnswer: chooseAnswer);
+    if (_activeScreen == 'questions-screen') {
+      screenWidget = QuestionsScreen(
+        onSelectAnswer: _chooseAnswer,
+      );
     }
 
-    if (activeScreen == 'result-screen') {
-      widgetScreen =  ResultScreen(chosenAnswers: chosenAnswers,);
+    if (_activeScreen == 'results-screen') {
+      screenWidget = ResultsScreen(
+        chosenAnswers: _selectedAnswers,
+        onRestart: restartQuiz,
+      );
     }
 
-    return (MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-          body: Container(
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(colors: [
-          Color.fromARGB(255, 78, 13, 151),
-          Color.fromARGB(255, 107, 15, 168)
-        ])),
-        child: widgetScreen,
-      )),
-    ));
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 78, 13, 151),
+                Color.fromARGB(255, 107, 15, 168),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: screenWidget,
+        ),
+      ),
+    );
   }
 }
