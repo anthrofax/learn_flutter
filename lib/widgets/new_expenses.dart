@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:learn_flutter/models/expense.dart';
 
 class NewExpenses extends StatefulWidget {
   const NewExpenses({super.key});
@@ -20,12 +19,21 @@ class _NewExpansesState extends State<NewExpenses> {
 
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  DateTime? _selectedDate;
 
-  void _onShowDatePicker() {
+  void _onShowDatePicker() async {
     final DateTime now = DateTime.now();
     final DateTime firstDate = DateTime(now.year - 1, now.month, now.day);
 
-    showDatePicker(context: context, firstDate: firstDate, lastDate: now);
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      firstDate: firstDate,
+      lastDate: now,
+    );
+
+    setState(() {
+      _selectedDate = pickedDate;
+    });
   }
 
   @override
@@ -62,7 +70,9 @@ class _NewExpansesState extends State<NewExpenses> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text("Selected Date"),
+                    Text(_selectedDate != null
+                        ? formatter.format(_selectedDate!)
+                        : "Selected Date"),
                     IconButton(
                         onPressed: _onShowDatePicker,
                         icon: const Icon(Icons.calendar_month)),
