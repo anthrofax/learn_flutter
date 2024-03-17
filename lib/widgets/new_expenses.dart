@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class NewExpenses extends StatefulWidget {
   const NewExpenses({super.key});
@@ -19,6 +21,13 @@ class _NewExpansesState extends State<NewExpenses> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
 
+  void _onShowDatePicker() {
+    final DateTime now = DateTime.now();
+    final DateTime firstDate = DateTime(now.year - 1, now.month, now.day);
+
+    showDatePicker(context: context, firstDate: firstDate, lastDate: now);
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -38,11 +47,29 @@ class _NewExpansesState extends State<NewExpenses> {
             maxLength: 50,
             decoration: const InputDecoration(label: Text("Expense Title")),
           ),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: _amountController,
-            decoration:
-                const InputDecoration(label: Text("Amount"), prefixText: "\$ "),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  controller: _amountController,
+                  decoration: const InputDecoration(
+                      label: Text("Amount"), prefixText: "\$ "),
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text("Selected Date"),
+                    IconButton(
+                        onPressed: _onShowDatePicker,
+                        icon: const Icon(Icons.calendar_month)),
+                  ],
+                ),
+              )
+            ],
           ),
           const SizedBox(
             height: 20,
@@ -50,9 +77,11 @@ class _NewExpansesState extends State<NewExpenses> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(onPressed: () {
-                Navigator.pop(context);
-              }, child: const Text("Cancel")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Cancel")),
               ElevatedButton(
                   onPressed: () {
                     print(_titleController.text);
