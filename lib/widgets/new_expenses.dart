@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/expense.dart';
 
 class NewExpenses extends StatefulWidget {
-  const NewExpenses({super.key});
+  const NewExpenses(this.onAddExpense, {super.key});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpenses> createState() {
@@ -38,22 +40,22 @@ class _NewExpansesState extends State<NewExpenses> {
   }
 
   void _onSubmitForm() {
-    double? enteredAmount = double.tryParse(_amountController.text);
+    final int? enteredAmount = int.tryParse(_amountController.text);
     bool isAmountValid = enteredAmount != null;
 
     if (_titleController.text.trim().isEmpty ||
-        isAmountValid ||
-        _selectedDate != null) {
+        !isAmountValid ||
+        _selectedDate == null) {
       showDialog(
           context: context,
-          builder: (context) => AlertDialog(
+          builder: (ctx) => AlertDialog(
                 title: const Text("Data Invalid"),
                 content: const Text(
                     "Data yang kamu inputkan masih ada yang tidak valid. Mohon periksa lagi data yang kamu inputkan"),
                 actions: [
                   TextButton(
-                      onPressed: () => {Navigator.pop(context)},
-                      child: const Text("Okeyy"))
+                      onPressed: () => {Navigator.pop(ctx)},
+                      child: const Text("Ok"))
                 ],
               ));
 
@@ -61,6 +63,14 @@ class _NewExpansesState extends State<NewExpenses> {
     }
 
     // Save leisure data
+    widget.onAddExpense(Expense(
+        title: _titleController.text,
+        amout: enteredAmount,
+        date: _selectedDate!,
+        category: _selectedCategory));
+
+    // Close Modal
+    Navigator.pop(context);
   }
 
   @override
@@ -102,6 +112,9 @@ class _NewExpansesState extends State<NewExpenses> {
                     Text(_selectedDate != null
                         ? formatter.format(_selectedDate!)
                         : "Tanggal"),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     IconButton(
                         onPressed: _onShowDatePicker,
                         icon: const Icon(Icons.calendar_month)),

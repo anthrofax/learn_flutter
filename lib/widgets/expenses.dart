@@ -28,7 +28,13 @@ class _ExpensesState extends State<Expenses> {
 
   void _openExpenseOverlay() {
     showModalBottomSheet(
-        context: context, builder: (ctx) => const NewExpenses());
+        context: context, builder: (ctx) => NewExpenses(onAddExpense));
+  }
+
+  void onAddExpense(Expense expense) {
+    setState(() {
+      _registeredExpense.add(expense);
+    });
   }
 
   @override
@@ -39,12 +45,15 @@ class _ExpensesState extends State<Expenses> {
         centerTitle: false,
         actions: [
           IconButton(
-              onPressed: _openExpenseOverlay, icon: const Icon(Icons.add))
+              onPressed: _openExpenseOverlay, icon: const Icon(Icons.add)),
         ],
       ),
       body: Column(
         children: [
           const Text("Chart"),
+          const SizedBox(
+            height: 12,
+          ),
           ExpenseList(expenses: _registeredExpense)
         ],
       ),
