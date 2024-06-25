@@ -3,9 +3,11 @@ import 'package:learn_flutter/widgets/expenses.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
+    MaterialApp(
+      theme: ThemeData.light().copyWith(
+          scaffoldBackgroundColor: const Color.fromARGB(255, 244, 108, 203)),
       debugShowCheckedModeBanner: false,
-      home: Expenses(),
+      home: const Expenses(),
     ),
   );
 }

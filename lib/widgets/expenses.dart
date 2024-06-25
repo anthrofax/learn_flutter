@@ -76,17 +76,19 @@ class _ExpensesState extends State<Expenses> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Flutter Expense Tracker"),
-        centerTitle: false,
-        actions: [
-          IconButton(
-              onPressed: _openExpenseOverlay, icon: const Icon(Icons.add)),
-        ],
-      ),
-      body: Column(
-        children: [const Text("Chart"), Expanded(child: mainContent)],
-      ),
-    );
+        appBar: AppBar(
+          title: const Text("Flutter Expense Tracker"),
+          centerTitle: false,
+          actions: [
+            IconButton(
+                onPressed: _openExpenseOverlay, icon: const Icon(Icons.add)),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: Column(
+            children: [const Text("Chart"), Expanded(child: mainContent)],
+          ),
+        ));
   }
 }
