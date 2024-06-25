@@ -38,13 +38,29 @@ class _NewExpansesState extends State<NewExpenses> {
   }
 
   void _onSubmitForm() {
-   double? enteredAmount = double.tryParse(_amountController.text);
-   bool isAmountValid = enteredAmount != null;
+    double? enteredAmount = double.tryParse(_amountController.text);
+    bool isAmountValid = enteredAmount != null;
 
+    if (_titleController.text.trim().isEmpty ||
+        isAmountValid ||
+        _selectedDate != null) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const Text("Data Invalid"),
+                content: const Text(
+                    "Data yang kamu inputkan masih ada yang tidak valid. Mohon periksa lagi data yang kamu inputkan"),
+                actions: [
+                  TextButton(
+                      onPressed: () => {Navigator.pop(context)},
+                      child: const Text("Okeyy"))
+                ],
+              ));
 
-    if (_titleController.text.trim().isEmpty || isAmountValid || _selectedDate != null) {
-    // Print error message
+      return;
     }
+
+    // Save leisure data
   }
 
   @override
