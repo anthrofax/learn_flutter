@@ -19,6 +19,7 @@ class _NewExpansesState extends State<NewExpenses> {
 
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  Category _selectedCategory = Category.leisure;
   DateTime? _selectedDate;
 
   void _onShowDatePicker() async {
@@ -53,7 +54,7 @@ class _NewExpansesState extends State<NewExpenses> {
             // onChanged: _onSaveTitleInput,
             controller: _titleController,
             maxLength: 50,
-            decoration: const InputDecoration(label: Text("Expense Title")),
+            decoration: const InputDecoration(label: Text("Judul Pengeluaran")),
           ),
           Row(
             children: [
@@ -62,7 +63,9 @@ class _NewExpansesState extends State<NewExpenses> {
                   keyboardType: TextInputType.number,
                   controller: _amountController,
                   decoration: const InputDecoration(
-                      label: Text("Amount"), prefixText: "\$ "),
+                      label: Text("Nilai"),
+                      prefixText: "\Rp. ",
+                      suffixText: ', 00-'),
                 ),
               ),
               Expanded(
@@ -72,7 +75,7 @@ class _NewExpansesState extends State<NewExpenses> {
                   children: [
                     Text(_selectedDate != null
                         ? formatter.format(_selectedDate!)
-                        : "Selected Date"),
+                        : "Tanggal"),
                     IconButton(
                         onPressed: _onShowDatePicker,
                         icon: const Icon(Icons.calendar_month)),
@@ -85,19 +88,38 @@ class _NewExpansesState extends State<NewExpenses> {
             height: 20,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Cancel")),
-              ElevatedButton(
-                  onPressed: () {
-                    print(_titleController.text);
-                    print(_amountController.text);
-                  },
-                  child: const Text("Save Expense"))
+              DropdownButton(
+                  value: _selectedCategory,
+                  items: Category.values
+                      .map((category) => DropdownMenuItem(
+                          value: category,
+                          child: Text(category.name.toUpperCase())))
+                      .toList(),
+                  onChanged: (category) => {
+                        setState(() {
+                          if (category == null) {
+                            return;
+                          }
+                          _selectedCategory = category;
+                        })
+                      }),
+              Row(
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Batalkan")),
+                  ElevatedButton(
+                      onPressed: () {
+                        print(_titleController.text);
+                        print(_amountController.text);
+                      },
+                      child: const Text("Simpan Pengeluaran"))
+                ],
+              )
             ],
           )
         ],
