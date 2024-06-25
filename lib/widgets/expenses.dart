@@ -39,6 +39,12 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  void onDeleteExpense(Expense expense) {
+    setState(() {
+      _registeredExpense.remove(expense);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +62,7 @@ class _ExpensesState extends State<Expenses> {
           const SizedBox(
             height: 12,
           ),
-          ExpenseList(expenses: _registeredExpense)
+          ExpenseList(expenses: _registeredExpense, onDeleteExpense: onDeleteExpense)
         ],
       ),
     );
