@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/widgets/chart/chart.dart';
 import 'package:learn_flutter/widgets/expense_list/expenses_list.dart';
 import 'package:learn_flutter/models/expense.dart';
 import 'package:learn_flutter/widgets/new_expenses.dart';
@@ -87,7 +88,10 @@ class _ExpensesState extends State<Expenses> {
         body: Padding(
           padding: const EdgeInsets.only(top: 15),
           child: Column(
-            children: [const Text("Chart"), Expanded(child: mainContent)],
+            children: [
+              Chart(expenses: _registeredExpense),
+              Expanded(child: mainContent)
+            ],
           ),
         ));
   }
