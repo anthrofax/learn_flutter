@@ -37,6 +37,16 @@ class _NewExpansesState extends State<NewExpenses> {
     });
   }
 
+  void _onSubmitForm() {
+   double? enteredAmount = double.tryParse(_amountController.text);
+   bool isAmountValid = enteredAmount != null;
+
+
+    if (_titleController.text.trim().isEmpty || isAmountValid || _selectedDate != null) {
+    // Print error message
+    }
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -113,10 +123,7 @@ class _NewExpansesState extends State<NewExpenses> {
                       },
                       child: const Text("Batalkan")),
                   ElevatedButton(
-                      onPressed: () {
-                        print(_titleController.text);
-                        print(_amountController.text);
-                      },
+                      onPressed: _onSubmitForm,
                       child: const Text("Simpan Pengeluaran"))
                 ],
               )
