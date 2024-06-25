@@ -11,7 +11,18 @@ void main() {
           colorScheme: kColorScheme,
           appBarTheme: const AppBarTheme().copyWith(
               backgroundColor: kColorScheme.onPrimaryContainer,
-              foregroundColor: kColorScheme.primaryContainer)),
+              foregroundColor: kColorScheme.primaryContainer),
+          cardTheme: const CardTheme().copyWith(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              color: kColorScheme.secondaryContainer),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: kColorScheme.primaryContainer)),
+          textTheme: ThemeData().textTheme.copyWith(
+              titleLarge: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  color: kColorScheme.onSecondaryContainer,
+                  fontSize: 14))),
       debugShowCheckedModeBanner: false,
       home: const Expenses(),
     ),
