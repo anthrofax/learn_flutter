@@ -64,6 +64,8 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     Widget mainContent = const Center(
       child:
           Text("Catatan pengeluaranmu belum ada, silahkan tambahkan beberapa."),
@@ -79,20 +81,28 @@ class _ExpensesState extends State<Expenses> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Flutter Expense Tracker"),
-          centerTitle: false,
+          centerTitle: width >= 600,
           actions: [
             IconButton(
                 onPressed: _openExpenseOverlay, icon: const Icon(Icons.add)),
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Column(
-            children: [
-              Chart(expenses: _registeredExpense),
-              Expanded(child: mainContent)
-            ],
-          ),
+          padding: const EdgeInsets.only(top: 25),
+          child: (width < 600)
+              ? Column(
+                  children: [
+                    Chart(expenses: _registeredExpense),
+                    Expanded(child: mainContent)
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: Chart(expenses: _registeredExpense)),
+                    Expanded(child: mainContent),
+                  ],
+                ),
         ));
   }
 }
