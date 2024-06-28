@@ -82,83 +82,88 @@ class _NewExpansesState extends State<NewExpenses> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
-      child: Column(
-        children: [
-          TextField(
-            // onChanged: _onSaveTitleInput,
-            controller: _titleController,
-            maxLength: 50,
-            decoration: const InputDecoration(label: Text("Judul Pengeluaran")),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: _amountController,
-                  decoration: const InputDecoration(
-                      label: Text("Nilai"),
-                      prefixText: "\Rp. ",
-                      suffixText: ', 00-'),
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+
+    return SizedBox(
+      height: double.infinity,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16, 48, 16, 16 + keyboardSpace),
+        child: Column(
+          children: [
+            TextField(
+              // onChanged: _onSaveTitleInput,
+              controller: _titleController,
+              maxLength: 50,
+              decoration: const InputDecoration(label: Text("Judul Pengeluaran")),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _amountController,
+                    decoration: const InputDecoration(
+                        label: Text("Nilai"),
+                        prefixText: "\Rp. ",
+                        suffixText: ', 00-'),
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(_selectedDate != null
+                          ? formatter.format(_selectedDate!)
+                          : "Tanggal"),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      IconButton(
+                          onPressed: _onShowDatePicker,
+                          icon: const Icon(Icons.calendar_month)),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                DropdownButton(
+                    value: _selectedCategory,
+                    items: Category.values
+                        .map((category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category.name.toUpperCase())))
+                        .toList(),
+                    onChanged: (category) => {
+                          setState(() {
+                            if (category == null) {
+                              return;
+                            }
+                            _selectedCategory = category;
+                          })
+                        }),
+                Row(
                   children: [
-                    Text(_selectedDate != null
-                        ? formatter.format(_selectedDate!)
-                        : "Tanggal"),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    IconButton(
-                        onPressed: _onShowDatePicker,
-                        icon: const Icon(Icons.calendar_month)),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Batalkan")),
+                    ElevatedButton(
+                        onPressed: _onSubmitForm,
+                        child: const Text("Simpan Pengeluaran"))
                   ],
-                ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DropdownButton(
-                  value: _selectedCategory,
-                  items: Category.values
-                      .map((category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category.name.toUpperCase())))
-                      .toList(),
-                  onChanged: (category) => {
-                        setState(() {
-                          if (category == null) {
-                            return;
-                          }
-                          _selectedCategory = category;
-                        })
-                      }),
-              Row(
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Batalkan")),
-                  ElevatedButton(
-                      onPressed: _onSubmitForm,
-                      child: const Text("Simpan Pengeluaran"))
-                ],
-              )
-            ],
-          )
-        ],
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
