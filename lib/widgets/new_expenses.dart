@@ -87,7 +87,7 @@ class _NewExpansesState extends State<NewExpenses> {
     return SizedBox(
       height: double.infinity,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(16, 48, 16, 16 + keyboardSpace),
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + keyboardSpace),
         child: Column(
           children: [
             TextField(
