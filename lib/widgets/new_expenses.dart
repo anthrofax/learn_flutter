@@ -113,124 +113,126 @@ class _NewExpansesState extends State<NewExpenses> {
 
       return SizedBox(
         height: double.infinity,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + keyboardSpace),
-          child: Column(
-            children: [
-              if (width > 600)
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: InputJudulPengeluaran(
-                          titleController: _titleController),
-                    ),
-                    const SizedBox(
-                      width: 35,
-                    ),
-                    Expanded(
-                      child: InputNilaiPengeluaran(
-                        amountController: _amountController,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + keyboardSpace),
+            child: Column(
+              children: [
+                if (width > 600)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: InputJudulPengeluaran(
+                            titleController: _titleController),
                       ),
-                    ),
-                  ],
-                )
-              else
-                // TextField(
-                //   // onChanged: _onSaveTitleInput,
-                //   controller: _titleController,
-                //   maxLength: 50,
-                //   decoration:
-                //       const InputDecoration(label: Text("Judul Pengeluaran")),
-                // ),
-                InputJudulPengeluaran(titleController: _titleController),
-              if (width > 600)
-                Row(
-                  children: [
-                    DropdownButton(
-                        value: _selectedCategory,
-                        items: Category.values
-                            .map((category) => DropdownMenuItem(
-                                value: category,
-                                child: Text(category.name.toUpperCase())))
-                            .toList(),
-                        onChanged: (category) => {
-                              setState(() {
-                                if (category == null) {
-                                  return;
-                                }
-                                _selectedCategory = category;
-                              })
-                            }),
-                    InputTanggal(
-                        onShowDatePicker: _onShowDatePicker,
-                        selectedDate: _selectedDate),
-                  ],
-                )
-              else
-                Row(
-                  children: [
-                    Expanded(
-                      child: InputNilaiPengeluaran(
-                        amountController: _amountController,
+                      const SizedBox(
+                        width: 35,
                       ),
-                    ),
-                    InputTanggal(
-                        onShowDatePicker: _onShowDatePicker,
-                        selectedDate: _selectedDate)
-                  ],
+                      Expanded(
+                        child: InputNilaiPengeluaran(
+                          amountController: _amountController,
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  // TextField(
+                  //   // onChanged: _onSaveTitleInput,
+                  //   controller: _titleController,
+                  //   maxLength: 50,
+                  //   decoration:
+                  //       const InputDecoration(label: Text("Judul Pengeluaran")),
+                  // ),
+                  InputJudulPengeluaran(titleController: _titleController),
+                if (width > 600)
+                  Row(
+                    children: [
+                      DropdownButton(
+                          value: _selectedCategory,
+                          items: Category.values
+                              .map((category) => DropdownMenuItem(
+                                  value: category,
+                                  child: Text(category.name.toUpperCase())))
+                              .toList(),
+                          onChanged: (category) => {
+                                setState(() {
+                                  if (category == null) {
+                                    return;
+                                  }
+                                  _selectedCategory = category;
+                                })
+                              }),
+                      InputTanggal(
+                          onShowDatePicker: _onShowDatePicker,
+                          selectedDate: _selectedDate),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InputNilaiPengeluaran(
+                          amountController: _amountController,
+                        ),
+                      ),
+                      InputTanggal(
+                          onShowDatePicker: _onShowDatePicker,
+                          selectedDate: _selectedDate)
+                    ],
+                  ),
+                const SizedBox(
+                  height: 20,
                 ),
-              const SizedBox(
-                height: 20,
-              ),
-              if (width > 600)
-                Row(
-                  children: [
-                    const Spacer(),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text("Batalkan")),
-                    ElevatedButton(
-                        onPressed: _onSubmitForm,
-                        child: const Text("Simpan Pengeluaran"))
-                  ],
-                )
-              else
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    DropdownButton(
-                        value: _selectedCategory,
-                        items: Category.values
-                            .map((category) => DropdownMenuItem(
-                                value: category,
-                                child: Text(category.name.toUpperCase())))
-                            .toList(),
-                        onChanged: (category) => {
-                              setState(() {
-                                if (category == null) {
-                                  return;
-                                }
-                                _selectedCategory = category;
-                              })
-                            }),
-                    Row(
-                      children: [
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("Batalkan")),
-                        ElevatedButton(
-                            onPressed: _onSubmitForm,
-                            child: const Text("Simpan Pengeluaran"))
-                      ],
-                    )
-                  ],
-                )
-            ],
+                if (width > 600)
+                  Row(
+                    children: [
+                      const Spacer(),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("Batalkan")),
+                      ElevatedButton(
+                          onPressed: _onSubmitForm,
+                          child: const Text("Simpan Pengeluaran"))
+                    ],
+                  )
+                else
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      DropdownButton(
+                          value: _selectedCategory,
+                          items: Category.values
+                              .map((category) => DropdownMenuItem(
+                                  value: category,
+                                  child: Text(category.name.toUpperCase())))
+                              .toList(),
+                          onChanged: (category) => {
+                                setState(() {
+                                  if (category == null) {
+                                    return;
+                                  }
+                                  _selectedCategory = category;
+                                })
+                              }),
+                      Row(
+                        children: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text("Batalkan")),
+                          ElevatedButton(
+                              onPressed: _onSubmitForm,
+                              child: const Text("Simpan Pengeluaran"))
+                        ],
+                      )
+                    ],
+                  )
+              ],
+            ),
           ),
         ),
       );
