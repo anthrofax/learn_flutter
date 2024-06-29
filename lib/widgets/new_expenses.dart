@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/expense.dart';
+import 'package:learn_flutter/widgets/input_judul_pengeluaran.dart';
+import 'package:learn_flutter/widgets/input_nilai_pengeluaran.dart';
+import 'package:learn_flutter/widgets/input_tanggal.dart';
 
 class NewExpenses extends StatefulWidget {
   const NewExpenses(this.onAddExpense, {super.key});
@@ -84,72 +87,85 @@ class _NewExpansesState extends State<NewExpenses> {
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
 
-    return SizedBox(
-      height: double.infinity,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + keyboardSpace),
-        child: Column(
-          children: [
-            TextField(
-              // onChanged: _onSaveTitleInput,
-              controller: _titleController,
-              maxLength: 50,
-              decoration: const InputDecoration(label: Text("Judul Pengeluaran")),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _amountController,
-                    decoration: const InputDecoration(
-                        label: Text("Nilai"),
-                        prefixText: "\Rp. ",
-                        suffixText: ', 00-'),
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(_selectedDate != null
-                          ? formatter.format(_selectedDate!)
-                          : "Tanggal"),
-                      const SizedBox(
-                        width: 20,
+    return LayoutBuilder(builder: (ctx, contraints) {
+      final width = contraints.maxWidth;
+
+      return SizedBox(
+        height: double.infinity,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + keyboardSpace),
+          child: Column(
+            children: [
+              if (width > 600)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: InputJudulPengeluaran(
+                          titleController: _titleController),
+                    ),
+                    const SizedBox(
+                      width: 35,
+                    ),
+                    Expanded(
+                      child: InputNilaiPengeluaran(
+                        amountController: _amountController,
                       ),
-                      IconButton(
-                          onPressed: _onShowDatePicker,
-                          icon: const Icon(Icons.calendar_month)),
-                    ],
-                  ),
+                    ),
+                  ],
                 )
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DropdownButton(
-                    value: _selectedCategory,
-                    items: Category.values
-                        .map((category) => DropdownMenuItem(
-                            value: category,
-                            child: Text(category.name.toUpperCase())))
-                        .toList(),
-                    onChanged: (category) => {
-                          setState(() {
-                            if (category == null) {
-                              return;
-                            }
-                            _selectedCategory = category;
-                          })
-                        }),
+              else
+                // TextField(
+                //   // onChanged: _onSaveTitleInput,
+                //   controller: _titleController,
+                //   maxLength: 50,
+                //   decoration:
+                //       const InputDecoration(label: Text("Judul Pengeluaran")),
+                // ),
+                InputJudulPengeluaran(titleController: _titleController),
+              if (width > 600)
                 Row(
                   children: [
+                    DropdownButton(
+                        value: _selectedCategory,
+                        items: Category.values
+                            .map((category) => DropdownMenuItem(
+                                value: category,
+                                child: Text(category.name.toUpperCase())))
+                            .toList(),
+                        onChanged: (category) => {
+                              setState(() {
+                                if (category == null) {
+                                  return;
+                                }
+                                _selectedCategory = category;
+                              })
+                            }),
+                    InputTanggal(
+                        onShowDatePicker: _onShowDatePicker,
+                        selectedDate: _selectedDate),
+                  ],
+                )
+              else
+                Row(
+                  children: [
+                    Expanded(
+                      child: InputNilaiPengeluaran(
+                        amountController: _amountController,
+                      ),
+                    ),
+                    InputTanggal(
+                        onShowDatePicker: _onShowDatePicker,
+                        selectedDate: _selectedDate)
+                  ],
+                ),
+              const SizedBox(
+                height: 20,
+              ),
+              if (width > 600)
+                Row(
+                  children: [
+                    const Spacer(),
                     TextButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -160,11 +176,43 @@ class _NewExpansesState extends State<NewExpenses> {
                         child: const Text("Simpan Pengeluaran"))
                   ],
                 )
-              ],
-            )
-          ],
+              else
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DropdownButton(
+                        value: _selectedCategory,
+                        items: Category.values
+                            .map((category) => DropdownMenuItem(
+                                value: category,
+                                child: Text(category.name.toUpperCase())))
+                            .toList(),
+                        onChanged: (category) => {
+                              setState(() {
+                                if (category == null) {
+                                  return;
+                                }
+                                _selectedCategory = category;
+                              })
+                            }),
+                    Row(
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Batalkan")),
+                        ElevatedButton(
+                            onPressed: _onSubmitForm,
+                            child: const Text("Simpan Pengeluaran"))
+                      ],
+                    )
+                  ],
+                )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:learn_flutter/widgets/expenses.dart';
 
 var kColorScheme =
@@ -11,11 +11,11 @@ var kDarkColorScheme = ColorScheme.fromSeed(
 
 void main() {
   // Dibuat untuk memastikan penerapan orientasi dan jalannya aplikasi bekerja sesuai dengan keinginan
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
 
 // Mengatur orientasi yang tersedia untuk aplikasi
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((fn) {
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+  //     .then((fn) {
     runApp(
       MaterialApp(
         darkTheme: ThemeData.dark().copyWith(
@@ -48,5 +48,5 @@ void main() {
         home: const Expenses(),
       ),
     );
-  });
+  // });
 }
