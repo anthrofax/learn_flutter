@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/expense.dart';
 import 'package:learn_flutter/widgets/input_judul_pengeluaran.dart';
@@ -27,6 +30,36 @@ class _NewExpansesState extends State<NewExpenses> {
   Category _selectedCategory = Category.leisure;
   DateTime? _selectedDate;
 
+  void _showDialog() {
+    if (Platform.isIOS) {
+      showCupertinoDialog(
+          context: context,
+          builder: (ctx) => CupertinoAlertDialog(
+                title: const Text("Data Invalid"),
+                content: const Text(
+                    "Data yang kamu inputkan masih ada yang tidak valid. Mohon periksa lagi data yang kamu inputkan"),
+                actions: [
+                  TextButton(
+                      onPressed: () => {Navigator.pop(ctx)},
+                      child: const Text("Ok"))
+                ],
+              ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text("Data Invalid"),
+                content: const Text(
+                    "Data yang kamu inputkan masih ada yang tidak valid. Mohon periksa lagi data yang kamu inputkan"),
+                actions: [
+                  TextButton(
+                      onPressed: () => {Navigator.pop(ctx)},
+                      child: const Text("Ok"))
+                ],
+              ));
+    }
+  }
+
   void _onShowDatePicker() async {
     final DateTime now = DateTime.now();
     final DateTime firstDate = DateTime(now.year - 1, now.month, now.day);
@@ -49,19 +82,7 @@ class _NewExpansesState extends State<NewExpenses> {
     if (_titleController.text.trim().isEmpty ||
         !isAmountValid ||
         _selectedDate == null) {
-      showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-                title: const Text("Data Invalid"),
-                content: const Text(
-                    "Data yang kamu inputkan masih ada yang tidak valid. Mohon periksa lagi data yang kamu inputkan"),
-                actions: [
-                  TextButton(
-                      onPressed: () => {Navigator.pop(ctx)},
-                      child: const Text("Ok"))
-                ],
-              ));
-
+      _showDialog();
       return;
     }
 
