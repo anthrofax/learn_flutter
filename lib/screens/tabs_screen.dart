@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internals/models/meal.dart';
 import 'package:flutter_internals/screens/categories_screen.dart';
+import 'package:flutter_internals/screens/filter_screen.dart';
 import 'package:flutter_internals/screens/meals_screen.dart';
 import 'package:flutter_internals/widgets/main_drawer.dart';
 
@@ -25,12 +26,14 @@ class _TabsScreenState extends State<TabsScreen> {
     if (_favoriteMeals.contains(meal)) {
       setState(() {
         _favoriteMeals.remove(meal);
-        showMarkedFavoriteMessage("Item ini telah dihapus dari daftar favorit anda.");
+        showMarkedFavoriteMessage(
+            "Item ini telah dihapus dari daftar favorit anda.");
       });
     } else {
       setState(() {
         _favoriteMeals.add(meal);
-        showMarkedFavoriteMessage("Item ini berhasil ditambahkan ke daftar favorit anda.");
+        showMarkedFavoriteMessage(
+            "Item ini berhasil ditambahkan ke daftar favorit anda.");
       });
     }
   }
@@ -44,10 +47,13 @@ class _TabsScreenState extends State<TabsScreen> {
   }
 
   void _selectScreen(String identifier) {
-    if (identifier == 'makanan') {
-      Navigator.of(context).pop();
-    } else {
-      // Lanjut
+    Navigator.of(context).pop();
+
+    if (identifier == 'filter') {
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (ctx) => const FilterScreen()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (ctx) => const FilterScreen()));
     }
   }
 
@@ -70,7 +76,9 @@ class _TabsScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
-      drawer:  MainDrawer(selectScreen: _selectScreen,),
+      drawer: MainDrawer(
+        selectScreen: _selectScreen,
+      ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: selectTab,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_internals/widgets/main_drawer.dart';
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
@@ -16,6 +17,14 @@ class _FilterScreenState extends State<FilterScreen> {
       appBar: AppBar(
         title: const Text('Filter mu'),
       ),
+      // drawer: MainDrawer(selectScreen: (identifier) {
+      //   Navigator.of(context).pop();
+
+      //   if (identifier == 'makanan') {
+      //     Navigator.pushReplacement(context,
+      //         MaterialPageRoute(builder: (ctx) => const FilterScreen()));
+      //   }
+      // }),
       body: Column(
         children: [
           SwitchListTile(
