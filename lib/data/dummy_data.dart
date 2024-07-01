@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_internals/models/category.dart';
-import 'package:flutter_internals/models/meals.dart';
+import 'package:flutter_internals/models/meal.dart';
 
 const availableCategories = [
   Category(
