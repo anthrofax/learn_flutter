@@ -43,6 +43,14 @@ class _TabsScreenState extends State<TabsScreen> {
     ));
   }
 
+  void _selectScreen(String identifier) {
+    if (identifier == 'makanan') {
+      Navigator.of(context).pop();
+    } else {
+      // Lanjut
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget activePage = CategoriesScreen(
@@ -62,7 +70,7 @@ class _TabsScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
-      drawer: const MainDrawer(),
+      drawer:  MainDrawer(selectScreen: _selectScreen,),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: selectTab,
