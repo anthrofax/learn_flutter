@@ -9,7 +9,10 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  bool glutenFreeFilterSet = false;
+  bool _glutenFreeFilterSet = false;
+  bool _lactosaFreeFilterSet = false;
+  bool _veganFilterSet = false;
+  bool _vegetarianFilterSet = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +31,11 @@ class _FilterScreenState extends State<FilterScreen> {
       body: Column(
         children: [
           SwitchListTile(
-            value: glutenFreeFilterSet,
+            value: _glutenFreeFilterSet,
             onChanged: (isChecked) {
-              if (isChecked) {
-                setState(() {
-                  glutenFreeFilterSet = isChecked;
-                });
-              }
+              setState(() {
+                _glutenFreeFilterSet = isChecked;
+              });
             },
             title: Text(
               "Bebas gula",
@@ -44,7 +45,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   .copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
             subtitle: Text(
-              "Hanya makanan yang mengandung gula",
+              "Hanya makanan yang tidak mengandung gula",
               style: Theme.of(context)
                   .textTheme
                   .labelMedium!
@@ -52,7 +53,79 @@ class _FilterScreenState extends State<FilterScreen> {
             ),
             activeColor: Theme.of(context).colorScheme.tertiary,
             contentPadding: const EdgeInsets.only(left: 34, right: 22),
-          )
+          ),
+          SwitchListTile(
+            value: _lactosaFreeFilterSet,
+            onChanged: (isChecked) {
+              setState(() {
+                _lactosaFreeFilterSet = isChecked;
+              });
+            },
+            title: Text(
+              "Bebas laktosa",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            subtitle: Text(
+              "Hanya makanan yang tidak mengandung laktosa",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            contentPadding: const EdgeInsets.only(left: 34, right: 22),
+          ),
+          SwitchListTile(
+            value: _vegetarianFilterSet,
+            onChanged: (isChecked) {
+              setState(() {
+                _vegetarianFilterSet = isChecked;
+              });
+            },
+            title: Text(
+              "Makanan vegetarian",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            subtitle: Text(
+              "Hanya makanan untuk vegetarian",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            contentPadding: const EdgeInsets.only(left: 34, right: 22),
+          ),
+          SwitchListTile(
+            value: _veganFilterSet,
+            onChanged: (isChecked) {
+              setState(() {
+                _veganFilterSet = isChecked;
+              });
+            },
+            title: Text(
+              "Makanan vegan",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            subtitle: Text(
+              "Hanya makanan vegan",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            contentPadding: const EdgeInsets.only(left: 34, right: 22),
+          ),
         ],
       ),
     );
