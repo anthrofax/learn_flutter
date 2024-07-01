@@ -22,10 +22,24 @@ class _TabsScreenState extends State<TabsScreen> {
 
   void _toggleFavoriteStatus(Meal meal) {
     if (_favoriteMeals.contains(meal)) {
-      _favoriteMeals.remove(meal);
+      setState(() {
+        _favoriteMeals.remove(meal);
+        showMarkedFavoriteMessage("Item ini telah dihapus dari daftar favorit anda.");
+      });
     } else {
-      _favoriteMeals.add(meal);
+      setState(() {
+        _favoriteMeals.add(meal);
+        showMarkedFavoriteMessage("Item ini berhasil ditambahkan ke daftar favorit anda.");
+      });
     }
+  }
+
+  void showMarkedFavoriteMessage(String message) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 4),
+    ));
   }
 
   @override
