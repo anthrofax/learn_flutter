@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internals/screens/categories_screen.dart';
+import 'package:flutter_internals/screens/tabs_screen.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,6 +21,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: theme, home: const CategoriesScreen());
+    return MaterialApp(theme: theme, home: const TabsScreen());
   }
 }
