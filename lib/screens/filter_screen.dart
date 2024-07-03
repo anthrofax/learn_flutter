@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_internals/provider/filter_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
-
 class FilterScreen extends ConsumerStatefulWidget {
-  const FilterScreen({super.key, required this.currentFilterStatus});
+  const FilterScreen({super.key});
 
-  final Map<FilterOptions, bool> currentFilterStatus;
   @override
   ConsumerState<FilterScreen> createState() => _FilterScreenState();
 }
@@ -21,10 +18,11 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
   @override
   void initState() {
     super.initState();
-    _glutenFreeFilterSet = widget.currentFilterStatus[FilterOptions.glutenFree]!;
-    _lactosaFreeFilterSet = widget.currentFilterStatus[FilterOptions.lactosaFree]!;
-    _veganFilterSet = widget.currentFilterStatus[FilterOptions.vegan]!;
-    _vegetarianFilterSet = widget.currentFilterStatus[FilterOptions.vegetarian]!;
+    final filtersStatus = ref.read(filtersProvider);
+    _glutenFreeFilterSet = filtersStatus[FilterOptions.glutenFree]!;
+    _lactosaFreeFilterSet = filtersStatus[FilterOptions.lactosaFree]!;
+    _veganFilterSet = filtersStatus[FilterOptions.vegan]!;
+    _vegetarianFilterSet = filtersStatus[FilterOptions.vegetarian]!;
   }
 
   @override
@@ -42,11 +40,18 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
       //   }
       // }),
       body: PopScope(
-        canPop: false,
+        canPop: true, //false
         onPopInvoked: (bool didPop) {
-          if (didPop) return;
+          // if (didPop) return;
 
-          Navigator.of(context).pop({
+          // Navigator.of(context).pop({
+          //   FilterOptions.glutenFree: _glutenFreeFilterSet,
+          //   FilterOptions.lactosaFree: _lactosaFreeFilterSet,
+          //   FilterOptions.vegetarian: _vegetarianFilterSet,
+          //   FilterOptions.vegan: _veganFilterSet
+          // });
+
+          ref.read(filtersProvider.notifier).setFilters({
             FilterOptions.glutenFree: _glutenFreeFilterSet,
             FilterOptions.lactosaFree: _lactosaFreeFilterSet,
             FilterOptions.vegetarian: _vegetarianFilterSet,

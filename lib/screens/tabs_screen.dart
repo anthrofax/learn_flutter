@@ -9,14 +9,8 @@ import 'package:flutter_internals/screens/meals_screen.dart';
 import 'package:flutter_internals/widgets/main_drawer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Map<FilterOptions, bool> kInitFilterState = {
-  FilterOptions.glutenFree: false,
-  FilterOptions.lactosaFree: false,
-  FilterOptions.vegan: false,
-  FilterOptions.vegetarian: false,
-};
-
-class TabsScreen extends ConsumerStatefulWidget { // ConsumerWidget klo stateless widget
+class TabsScreen extends ConsumerStatefulWidget {
+  // ConsumerWidget klo stateless widget
   const TabsScreen({super.key});
 
   @override
@@ -25,7 +19,6 @@ class TabsScreen extends ConsumerStatefulWidget { // ConsumerWidget klo stateles
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
-  Map<FilterOptions, bool> _selectedFilters = kInitFilterState;
 
   void selectTab(index) {
     setState(() {
@@ -39,37 +32,30 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     if (identifier == 'filter') {
       // Navigator.pushReplacement(
       //     context, MaterialPageRoute(builder: (ctx) => const FilterScreen()));
-      var filterResult = await Navigator.push<Map<FilterOptions, bool>>(
-          context,
-          MaterialPageRoute(
-              builder: (ctx) => FilterScreen(
-                    currentFilterStatus: _selectedFilters,
-                  )));
-
-      setState(() {
-        _selectedFilters = filterResult ?? kInitFilterState;
-      });
+      Navigator.push<Map<FilterOptions, bool>>(
+          context, MaterialPageRoute(builder: (ctx) => const FilterScreen()));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final meals = ref.watch(mealsProvider);
+    final selectedFilters = ref.watch(filtersProvider);
 
     final List<Meal> availableMeals = meals.where((meal) {
-      if (_selectedFilters[FilterOptions.glutenFree]! && !meal.isGlutenFree) {
+      if (selectedFilters[FilterOptions.glutenFree]! && !meal.isGlutenFree) {
         return false;
       }
 
-      if (_selectedFilters[FilterOptions.lactosaFree]! && !meal.isLactoseFree) {
+      if (selectedFilters[FilterOptions.lactosaFree]! && !meal.isLactoseFree) {
         return false;
       }
 
-      if (_selectedFilters[FilterOptions.vegan]! && !meal.isVegan) {
+      if (selectedFilters[FilterOptions.vegan]! && !meal.isVegan) {
         return false;
       }
 
-      if (_selectedFilters[FilterOptions.vegetarian]! && !meal.isVegetarian) {
+      if (selectedFilters[FilterOptions.vegetarian]! && !meal.isVegetarian) {
         return false;
       }
 

@@ -15,14 +15,18 @@ class FilterNotifer extends StateNotifier<Map<FilterOptions, bool>> {
     FilterOptions.vegetarian : false,
   });
 
-  void setFilters(FilterOptions chosenFilters, bool isActive) {
+  void setFilters(Map<FilterOptions, bool> chosenFilters) {
+   state = chosenFilters;
+  }
+
+  void setFilter(FilterOptions filter, bool isActive) {
     state = {
       ...state,
-      chosenFilters
+      filter: isActive
     };
   }
 }
 
-final filterProvider = StateNotifierProvider<FilterNotifer, Map<FilterOptions, bool>>((ref) {
+final filtersProvider = StateNotifierProvider<FilterNotifer, Map<FilterOptions, bool>>((ref) {
   return FilterNotifer();
-})
+});
