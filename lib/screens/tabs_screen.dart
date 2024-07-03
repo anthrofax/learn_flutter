@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internals/data/dummy_data.dart';
 import 'package:flutter_internals/models/meal.dart';
+import 'package:flutter_internals/provider/favorite_provider.dart';
 import 'package:flutter_internals/provider/meal_provider.dart';
 import 'package:flutter_internals/screens/categories_screen.dart';
 import 'package:flutter_internals/screens/filter_screen.dart';
@@ -25,28 +25,11 @@ class TabsScreen extends ConsumerStatefulWidget { // ConsumerWidget klo stateles
 class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
   Map<FilterOptions, bool> _selectedFilters = kInitFilterState;
-  final List<Meal> _favoriteMeals = [];
 
   void selectTab(index) {
     setState(() {
       _selectedPageIndex = index;
     });
-  }
-
-  void _toggleFavoriteStatus(Meal meal) {
-    if (_favoriteMeals.contains(meal)) {
-      setState(() {
-        _favoriteMeals.remove(meal);
-        showMarkedFavoriteMessage(
-            "Item ini telah dihapus dari daftar favorit anda.");
-      });
-    } else {
-      setState(() {
-        _favoriteMeals.add(meal);
-        showMarkedFavoriteMessage(
-            "Item ini berhasil ditambahkan ke daftar favorit anda.");
-      });
-    }
   }
 
   void showMarkedFavoriteMessage(String message) {
@@ -101,7 +84,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     }).toList();
 
     Widget activePage = CategoriesScreen(
-      onToggleFavorite: _toggleFavoriteStatus,
       availableMeals: availableMeals,
     );
     String activePageTitle = "Kategori";
@@ -109,8 +91,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     if (_selectedPageIndex == 1) {
       activePageTitle = "Daftar Makanan Favorit";
       activePage = MealsScreen(
-        meals: _favoriteMeals,
-        onToggleFavorite: _toggleFavoriteStatus,
+        meals: ref.watch(favoriteMealsProvider),
       );
     }
 
