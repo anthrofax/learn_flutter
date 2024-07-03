@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internals/models/meal.dart';
 import 'package:flutter_internals/provider/favorite_provider.dart';
+import 'package:flutter_internals/provider/filter_provider.dart';
 import 'package:flutter_internals/provider/meal_provider.dart';
 import 'package:flutter_internals/screens/categories_screen.dart';
 import 'package:flutter_internals/screens/filter_screen.dart';
