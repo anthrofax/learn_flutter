@@ -2,31 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_internals/provider/filter_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FilterScreen extends ConsumerStatefulWidget {
+class FilterScreen extends ConsumerWidget {
   const FilterScreen({super.key});
 
   @override
-  ConsumerState<FilterScreen> createState() => _FilterScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activeFilters = ref.watch(filtersProvider);
 
-class _FilterScreenState extends ConsumerState<FilterScreen> {
-  bool _glutenFreeFilterSet = false;
-  bool _lactosaFreeFilterSet = false;
-  bool _veganFilterSet = false;
-  bool _vegetarianFilterSet = false;
-
-  @override
-  void initState() {
-    super.initState();
-    final filtersStatus = ref.read(filtersProvider);
-    _glutenFreeFilterSet = filtersStatus[FilterOptions.glutenFree]!;
-    _lactosaFreeFilterSet = filtersStatus[FilterOptions.lactosaFree]!;
-    _veganFilterSet = filtersStatus[FilterOptions.vegan]!;
-    _vegetarianFilterSet = filtersStatus[FilterOptions.vegetarian]!;
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Filter mu'),
@@ -39,125 +21,105 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
       //         MaterialPageRoute(builder: (ctx) => const FilterScreen()));
       //   }
       // }),
-      body: PopScope(
-        canPop: true, //false
-        onPopInvoked: (bool didPop) {
-          // if (didPop) return;
-
-          // Navigator.of(context).pop({
-          //   FilterOptions.glutenFree: _glutenFreeFilterSet,
-          //   FilterOptions.lactosaFree: _lactosaFreeFilterSet,
-          //   FilterOptions.vegetarian: _vegetarianFilterSet,
-          //   FilterOptions.vegan: _veganFilterSet
-          // });
-
-          ref.read(filtersProvider.notifier).setFilters({
-            FilterOptions.glutenFree: _glutenFreeFilterSet,
-            FilterOptions.lactosaFree: _lactosaFreeFilterSet,
-            FilterOptions.vegetarian: _vegetarianFilterSet,
-            FilterOptions.vegan: _veganFilterSet
-          });
-        },
-        child: Column(
-          children: [
-            SwitchListTile(
-              value: _glutenFreeFilterSet,
-              onChanged: (isChecked) {
-                setState(() {
-                  _glutenFreeFilterSet = isChecked;
-                });
-              },
-              title: Text(
-                "Bebas gula",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              subtitle: Text(
-                "Hanya makanan yang tidak mengandung gula",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              activeColor: Theme.of(context).colorScheme.tertiary,
-              contentPadding: const EdgeInsets.only(left: 34, right: 22),
+      body: Column(
+        children: [
+          SwitchListTile(
+            value: activeFilters[FilterOptions.glutenFree]!,
+            onChanged: (isChecked) {
+              ref
+                  .watch(filtersProvider.notifier)
+                  .setFilter(FilterOptions.glutenFree, isChecked);
+            },
+            title: Text(
+              "Bebas gula",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
-            SwitchListTile(
-              value: _lactosaFreeFilterSet,
-              onChanged: (isChecked) {
-                setState(() {
-                  _lactosaFreeFilterSet = isChecked;
-                });
-              },
-              title: Text(
-                "Bebas laktosa",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              subtitle: Text(
-                "Hanya makanan yang tidak mengandung laktosa",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              activeColor: Theme.of(context).colorScheme.tertiary,
-              contentPadding: const EdgeInsets.only(left: 34, right: 22),
+            subtitle: Text(
+              "Hanya makanan yang tidak mengandung gula",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
-            SwitchListTile(
-              value: _vegetarianFilterSet,
-              onChanged: (isChecked) {
-                setState(() {
-                  _vegetarianFilterSet = isChecked;
-                });
-              },
-              title: Text(
-                "Makanan vegetarian",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              subtitle: Text(
-                "Hanya makanan untuk vegetarian",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              activeColor: Theme.of(context).colorScheme.tertiary,
-              contentPadding: const EdgeInsets.only(left: 34, right: 22),
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            contentPadding: const EdgeInsets.only(left: 34, right: 22),
+          ),
+          SwitchListTile(
+            value: activeFilters[FilterOptions.lactosaFree]!,
+            onChanged: (isChecked) {
+              ref
+                  .watch(filtersProvider.notifier)
+                  .setFilter(FilterOptions.lactosaFree, isChecked);
+            },
+            title: Text(
+              "Bebas laktosa",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
-            SwitchListTile(
-              value: _veganFilterSet,
-              onChanged: (isChecked) {
-                setState(() {
-                  _veganFilterSet = isChecked;
-                });
-              },
-              title: Text(
-                "Makanan vegan",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              subtitle: Text(
-                "Hanya makanan vegan",
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              activeColor: Theme.of(context).colorScheme.tertiary,
-              contentPadding: const EdgeInsets.only(left: 34, right: 22),
+            subtitle: Text(
+              "Hanya makanan yang tidak mengandung laktosa",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
-          ],
-        ),
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            contentPadding: const EdgeInsets.only(left: 34, right: 22),
+          ),
+          SwitchListTile(
+            value: activeFilters[FilterOptions.vegan]!,
+            onChanged: (isChecked) {
+              ref
+                  .watch(filtersProvider.notifier)
+                  .setFilter(FilterOptions.vegan, isChecked);
+            },
+            title: Text(
+              "Makanan vegetarian",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            subtitle: Text(
+              "Hanya makanan untuk vegetarian",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            contentPadding: const EdgeInsets.only(left: 34, right: 22),
+          ),
+          SwitchListTile(
+            value: activeFilters[FilterOptions.vegetarian]!,
+            onChanged: (isChecked) {
+              ref
+                  .watch(filtersProvider.notifier)
+                  .setFilter(FilterOptions.vegetarian, isChecked);
+            },
+            title: Text(
+              "Makanan vegan",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            subtitle: Text(
+              "Hanya makanan vegan",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            contentPadding: const EdgeInsets.only(left: 34, right: 22),
+          ),
+        ],
       ),
     );
   }
