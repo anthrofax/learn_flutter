@@ -32,14 +32,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     });
   }
 
-  void showMarkedFavoriteMessage(String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 4),
-    ));
-  }
-
   void _selectScreen(String identifier) async {
     Navigator.of(context).pop();
 

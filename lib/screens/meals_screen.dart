@@ -18,7 +18,6 @@ class MealsScreen extends StatelessWidget {
         MaterialPageRoute(
             builder: (ctx) => MealDetailScreen(
                   meal: meal,
-                  onToggleFavorite: onToggleFavorite,
                 )));
   }
 

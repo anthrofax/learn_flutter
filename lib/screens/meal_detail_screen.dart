@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internals/models/meal.dart';
+import 'package:flutter_internals/provider/favorite_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MealDetailScreen extends StatelessWidget {
-  const MealDetailScreen(
-      {super.key, required this.meal, required this.onToggleFavorite});
+class MealDetailScreen extends ConsumerWidget {
+  const MealDetailScreen({super.key, required this.meal});
 
-  final void Function(Meal meal) onToggleFavorite;
   final Meal meal;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return (Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
@@ -20,7 +20,17 @@ class MealDetailScreen extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              onToggleFavorite(meal);
+              final bool isMarked = ref
+                  .read(favoriteMealsProvider.notifier)
+                  .toggleFavoriteStatus(meal);
+
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(isMarked
+                    ? "Berhasil ditambahkan ke favorit"
+                    : "Berhasil dihapus dari favorit"),
+                duration: const Duration(seconds: 4),
+              ));
             },
           ),
         ],
