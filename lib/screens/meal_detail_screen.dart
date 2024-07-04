@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internals/models/meal.dart';
 import 'package:flutter_internals/provider/favorite_provider.dart';
-import 'package:flutter_internals/provider/filter_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MealDetailScreen extends ConsumerWidget {
@@ -15,16 +14,23 @@ class MealDetailScreen extends ConsumerWidget {
 
     final isFavorite = favoriteMeals.contains(meal);
 
-
-
     return (Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
           IconButton(
-            icon: Icon(
-              isFavorite ? Icons.star : Icons.star_border,
-              color: Colors.white,
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return RotationTransition(
+                  turns: animation,
+                  child: child,
+                );
+              },
+              child: Icon(
+                isFavorite ? Icons.star : Icons.star_border,
+                color: Colors.white,
+              ),
             ),
             onPressed: () {
               final bool isMarked = ref
