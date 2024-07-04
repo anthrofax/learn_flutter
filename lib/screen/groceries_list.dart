@@ -16,6 +16,27 @@ class _GroceriesListState extends State<GroceriesList> {
 
   @override
   Widget build(BuildContext context) {
+    Widget content = const Center(child: Text("No Groceries"));
+
+    if (groceriesList.isNotEmpty) {
+      content = ListView.builder(
+          itemCount: groceriesList.length,
+          itemBuilder: (ctx, i) => Dismissible(
+                key: ValueKey(groceriesList[i]),
+                onDismissed: (direction) {
+                  setState(() {
+                    groceriesList.remove(groceriesList[i]);
+                  });
+                },
+                child: GroceryItem(
+                  key: ValueKey(groceriesList[i].id),
+                  name: groceriesList[i].name,
+                  quantity: groceriesList[i].quantity,
+                  color: groceriesList[i].category.color,
+                ),
+              ));
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -44,13 +65,6 @@ class _GroceriesListState extends State<GroceriesList> {
           ],
           centerTitle: false,
         ),
-        body: ListView.builder(
-            itemCount: groceriesList.length,
-            itemBuilder: (ctx, i) => GroceryItem(
-                  key: ValueKey(groceriesList[i].id),
-                  name: groceriesList[i].name,
-                  quantity: groceriesList[i].quantity,
-                  color: groceriesList[i].category.color,
-                )));
+        body: content);
   }
 }
