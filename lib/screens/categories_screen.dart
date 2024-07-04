@@ -23,8 +23,10 @@ class _CategoriesScreenState extends State<CategoriesScreen>
   void initState() {
     super.initState();
 
-    final _animationController =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+
+    _animationController.forward();
   }
 
   @override
@@ -49,24 +51,31 @@ class _CategoriesScreenState extends State<CategoriesScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 3 / 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-          ),
-          children: [
-            for (final category in availableCategories)
-              CategoryGridItem(
-                category: category,
-                onSelectCategory: () {
-                  _selectCategory(context, category);
-                },
+    return AnimatedBuilder(
+        animation: _animationController,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: GridView(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 20,
               ),
-          ]),
-    );
+              children: [
+                for (final category in availableCategories)
+                  CategoryGridItem(
+                    category: category,
+                    onSelectCategory: () {
+                      _selectCategory(context, category);
+                    },
+                  ),
+              ]),
+        ),
+        builder: (ctx, child) => Padding(
+              padding:
+                  EdgeInsets.only(top: 100 - _animationController.value * 100),
+              child: child,
+            ));
   }
 }
