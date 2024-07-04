@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internals/models/meal.dart';
-import 'package:flutter_internals/screens/meal_detail_screen.dart';
 import 'package:flutter_internals/widgets/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealItem extends StatelessWidget {
-   MealItem({super.key, required this.meal, required this.navigateToDetailMealItem});
+   const MealItem({super.key, required this.meal, required this.navigateToDetailMealItem});
 
   final Meal meal;
 
@@ -19,7 +18,7 @@ class MealItem extends StatelessWidget {
         meal.affordability.name.substring(1);
   }
 
-  void Function() navigateToDetailMealItem;
+  final void Function() navigateToDetailMealItem;
   
 
   @override
@@ -33,13 +32,16 @@ class MealItem extends StatelessWidget {
           onTap: navigateToDetailMealItem,
           child: Stack(
             children: [
-              FadeInImage(
-                placeholder: MemoryImage(kTransparentImage),
-                image: NetworkImage(meal.imageUrl),
-                fit: BoxFit.cover,
-                height: 200,
-                width: double.infinity,
-                fadeInDuration: const Duration(milliseconds: 300),
+              Hero(
+                tag: meal.id,
+                child: FadeInImage(
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: NetworkImage(meal.imageUrl),
+                  fit: BoxFit.cover,
+                  height: 200,
+                  width: double.infinity,
+                  fadeInDuration: const Duration(milliseconds: 300),
+                ),
               ),
               Positioned(
                   bottom: 0,
