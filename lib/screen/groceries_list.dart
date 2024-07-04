@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/data/categories.dart';
 import 'package:learn_flutter/models/grocery.dart';
 import 'package:learn_flutter/screen/add_new_item_screen.dart';
 import 'package:learn_flutter/widget/grocery_item.dart';
 
 class GroceriesList extends StatefulWidget {
-  const GroceriesList({super.key, required this.groceriesList});
-
-  final List<Grocery> groceriesList;
+  const GroceriesList({super.key});
 
   @override
   State<GroceriesList> createState() => _GroceriesListState();
 }
 
 class _GroceriesListState extends State<GroceriesList> {
+  final List<Grocery> groceriesList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,9 +27,17 @@ class _GroceriesListState extends State<GroceriesList> {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
+              onPressed: () async {
+                var result = await Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => const AddNewItemScreen()));
+
+                if (result == null) {
+                  return;
+                }
+
+                setState(() {
+                  groceriesList.add(result);
+                });
               },
               icon: const Icon(Icons.add),
             )
@@ -36,12 +45,12 @@ class _GroceriesListState extends State<GroceriesList> {
           centerTitle: false,
         ),
         body: ListView.builder(
-            itemCount: widget.groceriesList.length,
+            itemCount: groceriesList.length,
             itemBuilder: (ctx, i) => GroceryItem(
-                  key: ValueKey(widget.groceriesList[i].id),
-                  name: widget.groceriesList[i].name,
-                  quantity: widget.groceriesList[i].quantity,
-                  color: widget.groceriesList[i].category.color,
+                  key: ValueKey(groceriesList[i].id),
+                  name: groceriesList[i].name,
+                  quantity: groceriesList[i].quantity,
+                  color: groceriesList[i].category.color,
                 )));
   }
 }

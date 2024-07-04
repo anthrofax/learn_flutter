@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/data/categories.dart';
 import 'package:learn_flutter/models/category.dart';
+import 'package:learn_flutter/models/grocery.dart';
 
 class AddNewItemScreen extends StatefulWidget {
   const AddNewItemScreen({super.key});
@@ -13,17 +14,19 @@ class AddNewItemScreen extends StatefulWidget {
 
 class _AddNewItemScreenState extends State<AddNewItemScreen> {
   final _formKey = GlobalKey<FormState>();
-  String itemName = '';
-  int quantity = 1;
-  Category category = categories[Categories.vegetables]!;
+  String _itemName = '';
+  int _quantity = 1;
+  Category _category = categories[Categories.vegetables]!;
 
   void _addItem() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      print(itemName);
-      print(quantity);
-      print(category);
+      Navigator.of(context).pop(Grocery(
+          id: DateTime.now().toString(),
+          name: _itemName,
+          quantity: _quantity,
+          category: _category));
     }
   }
 
@@ -60,7 +63,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     return null; // Return null jika validasi berhasil
                   },
                   onSaved: (value) {
-                    itemName = value!;
+                    _itemName = value!;
                   },
                 ),
                 Row(
@@ -83,7 +86,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           return null; // Return null jika validasi berhasil
                         },
                         onSaved: (value) {
-                          quantity = int.parse(value!);
+                          _quantity = int.parse(value!);
                         },
                       ),
                     ),
@@ -92,7 +95,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     ),
                     Expanded(
                       child: DropdownButtonFormField(
-                        value: category,
+                        value: _category,
                         items: [
                           for (final category in categories.entries)
                             DropdownMenuItem(
@@ -114,7 +117,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         ],
                         onChanged: (value) {
                           setState(() {
-                            category = value!;
+                            _category = value!;
                           });
                         },
                       ),
