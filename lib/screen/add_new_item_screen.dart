@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/data/categories.dart';
+import 'package:learn_flutter/models/category.dart';
 
 class AddNewItemScreen extends StatefulWidget {
   const AddNewItemScreen({super.key});
@@ -12,9 +13,18 @@ class AddNewItemScreen extends StatefulWidget {
 
 class _AddNewItemScreenState extends State<AddNewItemScreen> {
   final _formKey = GlobalKey<FormState>();
+  String itemName = '';
+  int quantity = 1;
+  Category category = categories[Categories.vegetables]!;
 
   void _addItem() {
-    _formKey.currentState!.validate();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      print(itemName);
+      print(quantity);
+      print(category);
+    }
   }
 
   void _resetForm() {
@@ -49,6 +59,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
                     return null; // Return null jika validasi berhasil
                   },
+                  onSaved: (value) {
+                    itemName = value!;
+                  },
                 ),
                 Row(
                   children: [
@@ -57,6 +70,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         decoration: const InputDecoration(
                           label: Text("Kuantitas"),
                         ),
+                        keyboardType: TextInputType.number,
                         initialValue: '1',
                         validator: (value) {
                           if (value == null ||
@@ -68,6 +82,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
                           return null; // Return null jika validasi berhasil
                         },
+                        onSaved: (value) {
+                          quantity = int.parse(value!);
+                        },
                       ),
                     ),
                     const SizedBox(
@@ -75,6 +92,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     ),
                     Expanded(
                       child: DropdownButtonFormField(
+                        value: category,
                         items: [
                           for (final category in categories.entries)
                             DropdownMenuItem(
@@ -94,7 +112,11 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                               ),
                             )
                         ],
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          setState(() {
+                            category = value!;
+                          });
+                        },
                       ),
                     ),
                   ],
