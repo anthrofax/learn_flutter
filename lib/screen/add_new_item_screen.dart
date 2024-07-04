@@ -29,7 +29,14 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 label: Text('Name'),
               ),
               validator: (value) {
-                return 'Demo....';
+                if (value == null ||
+                    value.isEmpty ||
+                    value.trim().length <= 1 ||
+                    value.trim().length > 50) {
+                  return 'Nama harus terdiri dari 2 - 50 karakter';
+                }
+
+                return null; // Return null jika validasi berhasil
               },
             ),
             Row(
@@ -40,6 +47,15 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       label: Text("Kuantitas"),
                     ),
                     initialValue: '1',
+                    validator: (value) {
+                      if (value == null || value.isEmpty ||
+                          int.tryParse(value) == null ||
+                          int.tryParse(value)! < 0) {
+                        return "Kuantitas harus berupa angka positif";
+                      }
+
+                      return null; // Return null jika validasi berhasil
+                    },
                   ),
                 ),
                 const SizedBox(
