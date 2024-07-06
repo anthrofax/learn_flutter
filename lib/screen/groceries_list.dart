@@ -72,6 +72,28 @@ class _GroceriesListState extends State<GroceriesList> {
     });
   }
 
+  void _deleteItem(Grocery item) async {
+    setState(() {
+      groceriesList.remove(item);
+    });
+
+    final url = Uri.https(
+        "flutter-prep-fe77f-default-rtdb.asia-southeast1.firebasedatabase.app",
+        "shopping-list/${item.id}.json");
+
+    final response = await http.delete(url);
+
+    if (response.statusCode >= 400) {
+      setState(() {
+        groceriesList.add(item);
+      });
+
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Failed to delete item. Please try again later.")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content = const Center(child: Text("No Groceries"));
@@ -88,11 +110,9 @@ class _GroceriesListState extends State<GroceriesList> {
       content = ListView.builder(
           itemCount: groceriesList.length,
           itemBuilder: (ctx, i) => Dismissible(
-                key: ValueKey(groceriesList[i]),
+                key: ValueKey(groceriesList[i].id),
                 onDismissed: (direction) {
-                  setState(() {
-                    groceriesList.remove(groceriesList[i]);
-                  });
+                  _deleteItem(groceriesList[i]);
                 },
                 child: GroceryItem(
                   key: ValueKey(groceriesList[i].id),
