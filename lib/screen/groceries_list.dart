@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import "package:http/http.dart" as http;
+
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/data/categories.dart';
 import 'package:learn_flutter/models/grocery.dart';
@@ -12,7 +16,45 @@ class GroceriesList extends StatefulWidget {
 }
 
 class _GroceriesListState extends State<GroceriesList> {
-  final List<Grocery> groceriesList = [];
+  List<Grocery> groceriesList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadItems();
+  }
+
+  void _loadItems() async {
+    final url = Uri.https(
+        "flutter-prep-fe77f-default-rtdb.asia-southeast1.firebasedatabase.app",
+        "shopping-list.json");
+
+    final response = await http.get(url);
+    Map<String, dynamic> result = json.decode(response.body);
+    List<Grocery> tempGroceryList = [];
+
+    for (final item in result.entries) {
+      final category = categories.entries.firstWhere(
+          (catData) => catData.value.categoryName == item.value['category']);
+
+      tempGroceryList.add(Grocery(
+          id: item.key,
+          name: item.value['name'],
+          quantity: item.value['quantity'],
+          category: category.value));
+    }
+
+    setState(() {
+      groceriesList = tempGroceryList;
+    });
+  }
+
+  void _addItem() async {
+    await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (ctx) => const AddNewItemScreen()));
+
+    _loadItems();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,18 +90,7 @@ class _GroceriesListState extends State<GroceriesList> {
           ),
           actions: [
             IconButton(
-              onPressed: () async {
-                var result = await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const AddNewItemScreen()));
-
-                if (result == null) {
-                  return;
-                }
-
-                setState(() {
-                  groceriesList.add(result);
-                });
-              },
+              onPressed: _addItem,
               icon: const Icon(Icons.add),
             )
           ],
