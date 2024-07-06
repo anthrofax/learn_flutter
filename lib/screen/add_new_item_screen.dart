@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -23,6 +25,18 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   void _addItem() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
+      final url = Uri.https(
+          "flutter-prep-fe77f-default-rtdb.asia-southeast1.firebasedatabase.app",
+          "shopping-list.json");
+
+      http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "name": _itemName,
+            "quantity": _quantity,
+            "category": _category.categoryName
+          }));
 
       Navigator.of(context).pop(Grocery(
           id: DateTime.now().toString(),
