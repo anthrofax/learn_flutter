@@ -80,6 +80,8 @@ class _GroceriesListState extends State<GroceriesList> {
   }
 
   void _deleteItem(Grocery item) async {
+    final index = groceriesList.indexOf(item);
+
     setState(() {
       groceriesList.remove(item);
     });
@@ -92,7 +94,7 @@ class _GroceriesListState extends State<GroceriesList> {
 
     if (response.statusCode >= 400) {
       setState(() {
-        groceriesList.add(item);
+        groceriesList.insert(index, item);
       });
 
       ScaffoldMessenger.of(context).clearSnackBars();
