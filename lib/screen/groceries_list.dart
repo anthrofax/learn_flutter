@@ -18,6 +18,7 @@ class GroceriesList extends StatefulWidget {
 
 class _GroceriesListState extends State<GroceriesList> {
   List<Grocery> groceriesList = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -47,6 +48,7 @@ class _GroceriesListState extends State<GroceriesList> {
 
     setState(() {
       groceriesList = tempGroceryList;
+      _isLoading = false;
     });
   }
 
@@ -84,6 +86,10 @@ class _GroceriesListState extends State<GroceriesList> {
                   color: groceriesList[i].category.color,
                 ),
               ));
+    }
+
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Scaffold(
