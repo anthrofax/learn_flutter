@@ -4,6 +4,7 @@ import "package:http/http.dart" as http;
 
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/data/categories.dart';
+import 'package:learn_flutter/models/category.dart';
 import 'package:learn_flutter/models/grocery.dart';
 import 'package:learn_flutter/screen/add_new_item_screen.dart';
 import 'package:learn_flutter/widget/grocery_item.dart';
@@ -50,10 +51,16 @@ class _GroceriesListState extends State<GroceriesList> {
   }
 
   void _addItem() async {
-    await Navigator.of(context)
+    Grocery? newItem = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (ctx) => const AddNewItemScreen()));
 
-    _loadItems();
+    if (newItem == null) {
+      return;
+    }
+
+    setState(() {
+      groceriesList.add(newItem);
+    });
   }
 
   @override

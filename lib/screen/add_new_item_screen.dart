@@ -38,11 +38,17 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
             "category": _category.categoryName
           }));
 
+      Map<String, dynamic> result = json.decode(response.body);
+
       if (!context.mounted) {
         return;
       }
 
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(Grocery(
+          id: result['name'],
+          name: _itemName,
+          quantity: _quantity,
+          category: _category));
     }
   }
 
