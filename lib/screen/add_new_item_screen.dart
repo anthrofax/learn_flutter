@@ -22,7 +22,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   int _quantity = 1;
   Category _category = categories[Categories.vegetables]!;
 
-  void _addItem() {
+  void _addItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -30,7 +30,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
           "flutter-prep-fe77f-default-rtdb.asia-southeast1.firebasedatabase.app",
           "shopping-list.json");
 
-      http.post(url,
+      final response = await http.post(url,
           headers: {"Content-Type": "application/json"},
           body: json.encode({
             "name": _itemName,
@@ -38,11 +38,11 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
             "category": _category.categoryName
           }));
 
-      Navigator.of(context).pop(Grocery(
-          id: DateTime.now().toString(),
-          name: _itemName,
-          quantity: _quantity,
-          category: _category));
+      if (!context.mounted) {
+        return;
+      }
+
+      Navigator.of(context).pop();
     }
   }
 
