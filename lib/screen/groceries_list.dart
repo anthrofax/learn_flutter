@@ -4,7 +4,6 @@ import "package:http/http.dart" as http;
 
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/data/categories.dart';
-import 'package:learn_flutter/models/category.dart';
 import 'package:learn_flutter/models/grocery.dart';
 import 'package:learn_flutter/screen/add_new_item_screen.dart';
 import 'package:learn_flutter/widget/grocery_item.dart';
@@ -19,6 +18,7 @@ class GroceriesList extends StatefulWidget {
 class _GroceriesListState extends State<GroceriesList> {
   List<Grocery> groceriesList = [];
   bool _isLoading = true;
+  String? _error;
 
   @override
   void initState() {
@@ -32,6 +32,13 @@ class _GroceriesListState extends State<GroceriesList> {
         "shopping-list.json");
 
     final response = await http.get(url);
+
+    if (response.statusCode >= 400) {
+      setState(() {
+        _error = "Failed to load items. Please try again later.";
+      });
+    }
+
     Map<String, dynamic> result = json.decode(response.body);
     List<Grocery> tempGroceryList = [];
 
@@ -69,6 +76,14 @@ class _GroceriesListState extends State<GroceriesList> {
   Widget build(BuildContext context) {
     Widget content = const Center(child: Text("No Groceries"));
 
+    if (_isLoading) {
+      content = const Center(child: CircularProgressIndicator());
+    }
+
+    if (_error != null) {
+      content = Center(child: Text(_error!));
+    }
+
     if (groceriesList.isNotEmpty) {
       content = ListView.builder(
           itemCount: groceriesList.length,
@@ -86,10 +101,6 @@ class _GroceriesListState extends State<GroceriesList> {
                   color: groceriesList[i].category.color,
                 ),
               ));
-    }
-
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
     }
 
     return Scaffold(
