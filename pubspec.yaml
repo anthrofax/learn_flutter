@@ -1,4 +1,4 @@
-name: learn_flutter
+name: favorite_places
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -35,7 +35,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  http: ^1.2.1
+  google_fonts: ^4.0.3
+  uuid: ^3.0.7
+  flutter_riverpod: ^2.3.2
 
 dev_dependencies:
   flutter_test:
