@@ -1,4 +1,5 @@
 import 'package:favorite_places/models/place.dart';
+import 'package:favorite_places/utils/get_static_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:location/location.dart';
@@ -69,17 +70,6 @@ class _LocationInputState extends State<LocationInput> {
     widget.onSelectLocation(_pickedLocation!);
   }
 
-  String get _locationImage {
-    if (_pickedLocation == null) {
-      return '';
-    }
-
-    final lat = _pickedLocation!.latitude;
-    final lng = _pickedLocation!.longitude;
-
-    return "https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C$lat,$lng&key=${dotenv.env['GOOGLE_MAP_API_KEY']}";
-  }
-
   @override
   Widget build(BuildContext context) {
     Widget isPreviewContent = Text(
@@ -100,8 +90,10 @@ class _LocationInputState extends State<LocationInput> {
         ),
         width: double.infinity,
         height: 170,
-        child: Image.network(_locationImage,
-            width: double.infinity, height: double.infinity),
+        child: Image.network(
+            getStaticMap(_pickedLocation!.latitude, _pickedLocation!.longitude),
+            width: double.infinity,
+            height: double.infinity),
       );
     }
 
