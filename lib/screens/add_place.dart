@@ -27,9 +27,10 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
       return;
     }
 
-    ref
-        .read(userPlacesProvider.notifier)
-        .addPlace(enteredTitle, _selectedImage!);
+    // ref.read(userPlacesProvider.notifier).addPlace(
+    //       enteredTitle,
+    //       _selectedImage!,
+    //     );
 
     Navigator.of(context).pop();
   }
@@ -49,7 +50,6 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: SingleChildScrollView(
-          
           child: Column(
             children: [
               TextField(
