@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:favorite_places/models/place.dart';
 import 'package:favorite_places/widgets/image_input.dart';
 import 'package:favorite_places/widgets/location_input.dart';
 import 'package:flutter/material.dart';
@@ -19,18 +20,46 @@ class AddPlaceScreen extends ConsumerStatefulWidget {
 class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _titleController = TextEditingController();
   File? _selectedImage;
+  PlaceLocation? _pickedLocation;
 
-  void _savePlace() {
+  Future<void> _savePlace() async {
     final enteredTitle = _titleController.text;
 
-    if (enteredTitle.isEmpty || _selectedImage == null) {
-      return;
+    if (enteredTitle.isEmpty ||
+        _selectedImage == null ||
+        _pickedLocation == null) {
+      return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text(
+                  'Data tidak valid',
+                ),
+                content: const Text('Masih ada data yang belum diisi!'),
+                backgroundColor: Theme.of(context).colorScheme.surface,
+                titleTextStyle:
+                    Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                contentTextStyle:
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              ));
     }
 
-    // ref.read(userPlacesProvider.notifier).addPlace(
-    //       enteredTitle,
-    //       _selectedImage!,
-    //     );
+    ref.read(userPlacesProvider.notifier).addPlace(
+          enteredTitle,
+          _selectedImage!,
+          _pickedLocation!,
+        );
 
     Navigator.of(context).pop();
   }
@@ -66,7 +95,11 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              const LocationInput(),
+              LocationInput(
+                onSelectLocation: (pickedLocation) {
+                  _pickedLocation = pickedLocation;
+                },
+              ),
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: _savePlace,

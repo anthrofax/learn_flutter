@@ -16,12 +16,15 @@ final theme = ThemeData().copyWith(
   textTheme: GoogleFonts.ubuntuCondensedTextTheme().copyWith(
     titleSmall: GoogleFonts.ubuntuCondensed(
       fontWeight: FontWeight.bold,
+      color: colorScheme.onSurface,
     ),
     titleMedium: GoogleFonts.ubuntuCondensed(
       fontWeight: FontWeight.bold,
+      color: colorScheme.onSurface,
     ),
     titleLarge: GoogleFonts.ubuntuCondensed(
       fontWeight: FontWeight.bold,
+      color: colorScheme.onSurface,
     ),
   ),
 );
