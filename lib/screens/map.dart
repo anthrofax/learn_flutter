@@ -4,7 +4,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/place.dart';
 
 class MapScreen extends StatefulWidget {
-  MapScreen({super.key, this.isSelecting = true, this.location});
+  MapScreen({super.key, this.isSelecting = true, location})
+      : location = location ??
+            PlaceLocation(latitude: 37.422, longitude: -122.084, address: '');
 
   final bool isSelecting;
   final PlaceLocation? location;
