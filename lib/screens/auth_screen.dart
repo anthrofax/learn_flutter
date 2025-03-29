@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:favorite_places/widgets/user_image_picker.dart';
 
@@ -52,7 +53,17 @@ class _AuthScreenState extends State<AuthScreen> {
           password: _passwordController,
         );
 
-        print(userCredential);
+        // Upload gambar ke Firebase Storage
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('user_images')
+            .child('${userCredential.user!.uid}.jpg');
+
+        await storageRef.putFile(_profileImage!);
+        final imageUrl = await storageRef.getDownloadURL();
+
+        print('Download URL: $imageUrl');
+        print('User Credential: $userCredential');
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {}
