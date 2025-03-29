@@ -1,6 +1,8 @@
-import 'package:favorite_places/widgets/user_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+
+import 'package:favorite_places/widgets/user_image_picker.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -15,6 +17,8 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   String _emailController = '';
   String _passwordController = '';
+  File? _profileImage;
+
   bool _isLogin = true;
 
   void _toggleAuthMode() {
@@ -27,6 +31,8 @@ class _AuthScreenState extends State<AuthScreen> {
     final isValid = _formKey.currentState!.validate();
 
     if (!isValid) return;
+
+    if (!_isLogin && _profileImage != null) return;
 
     _formKey.currentState!.save();
 
@@ -79,7 +85,10 @@ class _AuthScreenState extends State<AuthScreen> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      if (!_isLogin) const UserImagePicker(),
+                      if (!_isLogin)
+                        UserImagePicker(onPickImage: (pickedImage) {
+                          _profileImage = pickedImage;
+                        }),
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Alamat Email',
