@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final _firebase = FirebaseAuth.instance;
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -9,8 +12,8 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  String _emailController = '';
+  String _passwordController = '';
   bool _isLogin = true;
 
   void _toggleAuthMode() {
@@ -19,11 +22,40 @@ class _AuthScreenState extends State<AuthScreen> {
     });
   }
 
-  void _onSubmitForm() {
+  Future<void> _onSubmitForm() async {
     final isValid = _formKey.currentState!.validate();
 
-    if (isValid) {
-      _formKey.currentState!.save();
+    if (!isValid) return;
+
+    _formKey.currentState!.save();
+
+    try {
+      if (_isLogin) {
+        // Login Logic
+        final userCredential = await _firebase.signInWithEmailAndPassword(
+          email: _emailController,
+          password: _passwordController,
+        );
+
+        print(userCredential);
+      } else {
+        //  Signup Logic
+        final userCredential = await _firebase.createUserWithEmailAndPassword(
+          email: _emailController,
+          password: _passwordController,
+        );
+
+        print(userCredential);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {}
+
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "Terjadi kesalahan saat membuat akun"),
+        ),
+      );
     }
   }
 
@@ -51,7 +83,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           labelText: 'Alamat Email',
                         ),
                         validator: (value) {
-                          if (value!.isEmpty) {
+                          if (value == null || value.trim().isEmpty) {
                             return "Email tidak boleh kosong";
                           }
 
@@ -61,17 +93,28 @@ class _AuthScreenState extends State<AuthScreen> {
 
                           return null;
                         },
+                        onSaved: (value) {
+                          _emailController = value!;
+                        },
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Password',
                         ),
                         validator: (value) {
-                          if (value!.length < 6) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Password tidak boleh kosong";
+                          }
+
+                          if (value.length < 6) {
                             return "Password harus memiliki minimal 6 karakter";
                           }
 
                           return null;
+                        },
+                        obscureText: true,
+                        onSaved: (value) {
+                          _passwordController = value!;
                         },
                       ),
                       const SizedBox(
