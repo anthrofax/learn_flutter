@@ -1,5 +1,6 @@
 import 'package:favorite_places/screens/auth_screen.dart';
 import 'package:favorite_places/screens/chat_screen.dart';
+import 'package:favorite_places/screens/splash_screen.dart';
 import 'firebase_options.dart';
 
 import 'package:flutter/material.dart';
@@ -29,13 +30,17 @@ class App extends StatelessWidget {
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SplashScreen();
+          }
+
           if (snapshot.hasData) {
             // Jika ada data (pengguna telah login), tampilkan ChatScreen
             return const ChatScreen();
-          } else {
-            // Jika tidak ada data (pengguna belum login), tampilkan AuthScreen
-            return const AuthScreen();
           }
+
+          // Jika tidak ada data (pengguna belum login), tampilkan AuthScreen
+          return const AuthScreen();
         },
       ),
     );
