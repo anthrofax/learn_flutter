@@ -35,9 +35,9 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FlutterChat'),
+        title: const Text('Flutter Chat'),
         actions: [
-          IconButton(
+          IconButton( 
             onPressed: () => _signOut(context),
             icon: const Icon(Icons.exit_to_app),
           ),
