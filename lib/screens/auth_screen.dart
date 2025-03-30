@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:favorite_places/widgets/user_image_picker.dart';
 
@@ -16,9 +17,11 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _emailController = '';
-  String _passwordController = '';
+  String _enteredEmail = '';
+  String _enteredPassword = '';
+
   File? _profileImage;
+  bool _isAuthenticating = false;
 
   bool _isLogin = true;
 
@@ -33,24 +36,43 @@ class _AuthScreenState extends State<AuthScreen> {
 
     if (!isValid) return;
 
-    if (!_isLogin && _profileImage != null) return;
+    if (!_isLogin && _profileImage == null) {
+      return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text('Data belum lengkap'),
+                content: const Text(
+                    'Anda belum menentukan gambar profil untuk akun anda!'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("Ok"))
+                ],
+              ));
+    }
 
     _formKey.currentState!.save();
 
     try {
+      setState(() {
+        _isAuthenticating = true;
+      });
+
       if (_isLogin) {
         // Login Logic
         final userCredential = await _firebase.signInWithEmailAndPassword(
-          email: _emailController,
-          password: _passwordController,
+          email: _enteredEmail,
+          password: _enteredPassword,
         );
 
         print(userCredential);
       } else {
         //  Signup Logic
         final userCredential = await _firebase.createUserWithEmailAndPassword(
-          email: _emailController,
-          password: _passwordController,
+          email: _enteredEmail,
+          password: _enteredPassword,
         );
 
         // Upload gambar ke Firebase Storage
@@ -60,10 +82,18 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('${userCredential.user!.uid}.jpg');
 
         await storageRef.putFile(_profileImage!);
+        // Ambil URL gambar yang sudah terunggah
         final imageUrl = await storageRef.getDownloadURL();
 
-        print('Download URL: $imageUrl');
-        print('User Credential: $userCredential');
+        // Simpan data pengguna ke Firestore
+        await FirebaseFirestore.instance
+            .collection('users') // Koleksi "users"
+            .doc(userCredential.user!.uid) // Dokumen dengan UID sebagai nama
+            .set({
+          'username': 'to be done...', // Nama pengguna (akan ditambahkan nanti)
+          'email': _enteredEmail, // Email pengguna
+          'image_url': imageUrl, // URL gambar yang diunggah
+        });
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {}
@@ -74,6 +104,10 @@ class _AuthScreenState extends State<AuthScreen> {
           content: Text(e.message ?? "Terjadi kesalahan saat membuat akun"),
         ),
       );
+    } finally {
+      setState(() {
+        _isAuthenticating = false;
+      });
     }
   }
 
@@ -116,7 +150,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           return null;
                         },
                         onSaved: (value) {
-                          _emailController = value!;
+                          _enteredEmail = value!;
                         },
                       ),
                       TextFormField(
@@ -136,34 +170,37 @@ class _AuthScreenState extends State<AuthScreen> {
                         },
                         obscureText: true,
                         onSaved: (value) {
-                          _passwordController = value!;
+                          _enteredPassword = value!;
                         },
                       ),
                       const SizedBox(
                         height: 12,
                       ),
-                      ElevatedButton(
-                        onPressed: _onSubmitForm,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
+                      if (_isAuthenticating) const CircularProgressIndicator(),
+                      if (!_isAuthenticating)
+                        ElevatedButton(
+                          onPressed: _onSubmitForm,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                          ),
+                          child: Text(
+                            _isLogin ? 'Login' : 'Sign Up',
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryContainer,
+                                    ),
+                          ),
                         ),
-                        child: Text(
-                          _isLogin ? 'Login' : 'Sign Up',
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primaryContainer,
-                                  ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: _toggleAuthMode,
-                        child: Text(_isLogin
-                            ? "Buat akun disini"
-                            : 'Sudah punya akun? login disini'),
-                      )
+                      if (!_isAuthenticating)
+                        TextButton(
+                          onPressed: _toggleAuthMode,
+                          child: Text(_isLogin
+                              ? "Buat akun disini"
+                              : 'Sudah punya akun? login disini'),
+                        )
                     ],
                   ),
                 ),
