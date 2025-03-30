@@ -37,18 +37,18 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Flutter Chat'),
         actions: [
-          IconButton( 
+          IconButton(
             onPressed: () => _signOut(context),
             icon: const Icon(Icons.exit_to_app),
           ),
         ],
       ),
-      body: const Column(
+      body: Column(
         children: [
           Expanded(
             child: ChatMessages(),
           ),
-          ChatInput(),
+          const ChatInput(),
         ],
       ),
     );
