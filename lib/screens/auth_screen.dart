@@ -18,6 +18,7 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   String _enteredEmail = '';
+  String _enteredUsername = '';
   String _enteredPassword = '';
 
   File? _profileImage;
@@ -90,7 +91,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .collection('users') // Koleksi "users"
             .doc(userCredential.user!.uid) // Dokumen dengan UID sebagai nama
             .set({
-          'username': 'to be done...', // Nama pengguna (akan ditambahkan nanti)
+          'username': _enteredUsername, // Nama pengguna (akan ditambahkan nanti)
           'email': _enteredEmail, // Email pengguna
           'image_url': imageUrl, // URL gambar yang diunggah
         });
@@ -138,6 +139,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Alamat Email',
                         ),
+                        enableSuggestions: true,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "Email tidak boleh kosong";
@@ -153,6 +155,23 @@ class _AuthScreenState extends State<AuthScreen> {
                           _enteredEmail = value!;
                         },
                       ),
+                      if (!_isLogin)
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Username',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty || value.trim().length < 4) {
+                              return "Harap masukkan username yang valid (Minimal 4 karakter)";
+                            }
+
+                            return null;
+                          },
+                          enableSuggestions: false,
+                          onSaved: (value) {
+                            _enteredUsername = value!;
+                          },
+                        ),
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Password',
